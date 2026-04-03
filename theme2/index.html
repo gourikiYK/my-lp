@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>駐車場平面化 実務ガイド | GOURIKI Corporation</title>
+<script src="https://unpkg.com/lucide@latest"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700;900&family=Noto+Sans+JP:wght@400;500;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --forest:   #1b4332;
+  --forest-m: #2d6a4f;
+  --forest-l: #d8f3dc;
+  --forest-xl:#f0faf2;
+  --paper:    #fdfcf8;
+  --ink:      #111827;
+  --ink-soft: #374151;
+  --rule:     #e5e7eb;
+  --amber:    #92400e;
+  --amber-l:  #fef3c7;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Noto Serif JP', serif; background: var(--paper); color: var(--ink); line-height: 1.85; }
+
+/* ===== HEADER ===== */
+.kanban-header { background: var(--ink); border-bottom: 3px solid var(--forest-m); }
+.kanban-inner { max-width: 1100px; margin: 0 auto; padding: 1.25rem 1.5rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+.kanban-left { display: flex; align-items: center; gap: 1rem; }
+.kanban-icon-wrap { width: 46px; height: 46px; background: var(--forest-m); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.kanban-brand { display: flex; flex-direction: column; gap: .1rem; }
+.kanban-label { font-family: 'Noto Sans JP', sans-serif; font-size: .6rem; font-weight: 700; letter-spacing: .2em; color: #52b788; text-transform: uppercase; }
+.kanban-title { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 900; color: #fff; line-height: 1.1; }
+.kanban-title span { font-family: 'Noto Sans JP', sans-serif; font-weight: 700; font-size: 1rem; color: #52b788; margin-left: .25rem; }
+.kanban-sub { font-family: 'Noto Sans JP', sans-serif; font-size: .62rem; color: rgba(255,255,255,.45); letter-spacing: .05em; margin-top: .15rem; }
+.kanban-tagline { font-family: 'Noto Sans JP', sans-serif; font-size: .72rem; color: rgba(255,255,255,.55); line-height: 1.85; max-width: 380px; border-left: 2px solid var(--forest-m); padding-left: 1rem; }
+.kanban-tagline strong { display: block; color: #fff; font-size: .82rem; margin-bottom: .2rem; }
+.kanban-divider { height: 2px; background: linear-gradient(90deg, var(--forest-m) 0%, transparent 100%); max-width: 1100px; margin: 0 auto; opacity: .35; }
+
+/* ===== CHAPTER BANNER ===== */
+.chapter-banner { background: var(--ink); padding: 4.5rem 1.5rem 3.5rem; position: relative; overflow: hidden; }
+.chapter-banner::after { content: attr(data-kanji); position: absolute; right: 2rem; top: 50%; transform: translateY(-50%); font-family: 'Playfair Display', serif; font-size: 10rem; font-weight: 900; color: rgba(255,255,255,.04); line-height: 1; pointer-events: none; user-select: none; }
+.banner-inner { max-width: 860px; margin: 0 auto; }
+.chapter-num { font-family: 'Noto Sans JP', sans-serif; font-size: .65rem; font-weight: 700; letter-spacing: .25em; color: #52b788; margin-bottom: .75rem; display: flex; align-items: center; gap: .5rem; }
+.chapter-num::before { content: ''; display: block; width: 24px; height: 1px; background: #52b788; }
+.chapter-h { font-family: 'Playfair Display', serif; font-size: clamp(2rem,4.5vw,3.6rem); font-weight: 900; color: #fff; line-height: 1.15; }
+.chapter-h span { color: #52b788; }
+.chapter-sub { font-family: 'Noto Serif JP', serif; font-size: .92rem; color: rgba(255,255,255,.6); max-width: 640px; margin-top: 1rem; line-height: 1.9; }
+
+/* ===== ARTICLE ===== */
+.article { max-width: 860px; margin: 0 auto; padding: 0 1.5rem; }
+.section { padding: 3.5rem 0; border-bottom: 1px solid var(--rule); }
+.h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.4rem,2.5vw,1.9rem); font-weight: 700; color: var(--ink); line-height: 1.3; margin-bottom: .85rem; }
+.h2 em { font-style: normal; color: var(--forest); }
+.h3 { font-family: 'Noto Serif JP', serif; font-size: 1rem; font-weight: 700; color: var(--ink); padding-left: .85rem; border-left: 3px solid var(--forest); margin: 2rem 0 .75rem; }
+.p { font-family: 'Noto Serif JP', serif; font-size: .95rem; color: var(--ink-soft); line-height: 2; margin-bottom: 1.1rem; }
+.p:last-child { margin-bottom: 0; }
+.dropcap::first-letter { font-family: 'Playfair Display', serif; font-size: 3.8rem; font-weight: 900; float: left; line-height: .8; margin: .1rem .5rem 0 0; color: var(--forest); }
+
+/* ===== PULL QUOTE ===== */
+.pull-quote { border-top: 3px solid var(--ink); border-bottom: 3px solid var(--ink); padding: 1.5rem 0; margin: 2.5rem 0; }
+.pull-quote p { font-family: 'Playfair Display', serif; font-size: clamp(1.2rem,2vw,1.5rem); font-weight: 700; color: var(--ink); line-height: 1.5; }
+
+/* ===== BOXES ===== */
+.note-box { background: var(--amber-l); border-left: 4px solid #d97706; border-radius: 0 6px 6px 0; padding: 1.25rem 1.5rem; margin: 2rem 0; font-family: 'Noto Sans JP', sans-serif; }
+.note-box strong { display: block; font-size: .78rem; color: var(--amber); margin-bottom: .3rem; }
+.note-box p { font-size: .78rem; color: #451a03; line-height: 1.85; }
+.forest-box { background: var(--forest-l); border-left: 4px solid var(--forest); border-radius: 0 6px 6px 0; padding: 1.25rem 1.5rem; margin: 2rem 0; font-family: 'Noto Sans JP', sans-serif; }
+.forest-box strong { display: block; font-size: .78rem; color: var(--forest); margin-bottom: .3rem; }
+.forest-box p { font-size: .78rem; color: #1b4332; line-height: 1.85; }
+
+/* ===== STATS ===== */
+.stat-row { display: grid; grid-template-columns: repeat(auto-fit,minmax(130px,1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; margin: 2rem 0; }
+.stat-cell { background: var(--paper); padding: 1.5rem 1.25rem; text-align: center; }
+.stat-n { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; color: var(--forest); line-height: 1; }
+.stat-u { font-size: .75rem; color: var(--forest); }
+.stat-d { font-family: 'Noto Sans JP', sans-serif; font-size: .68rem; color: #6b7280; margin-top: .3rem; line-height: 1.5; }
+
+/* ===== TABLE ===== */
+.table-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid var(--rule); margin: 1.5rem 0; }
+table { width: 100%; border-collapse: collapse; font-family: 'Noto Sans JP', sans-serif; }
+thead th { background: var(--ink); color: #fff; padding: .6rem .9rem; font-size: .72rem; text-align: left; font-weight: 700; }
+thead th:not(:first-child) { text-align: center; }
+td { padding: .65rem .9rem; font-size: .8rem; border-bottom: 1px solid var(--rule); color: var(--ink-soft); vertical-align: middle; }
+td:not(:first-child) { text-align: center; }
+tr:nth-child(even) td { background: #fafafa; }
+td:first-child { font-weight: 700; color: var(--ink); }
+.bg { display: inline-block; background: #dcfce7; color: #166534; border-radius: 3px; padding: .1rem .45rem; font-size: .65rem; font-weight: 700; }
+.br { display: inline-block; background: #fee2e2; color: #991b1b; border-radius: 3px; padding: .1rem .45rem; font-size: .65rem; font-weight: 700; }
+.by { display: inline-block; background: #fef9c3; color: #713f12; border-radius: 3px; padding: .1rem .45rem; font-size: .65rem; font-weight: 700; }
+
+/* ===== STEPS ===== */
+.steps-wrap { overflow-x: auto; padding-bottom: .5rem; margin: 2rem 0; }
+.steps { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: var(--rule); min-width: 580px; border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; }
+.step { background: var(--paper); padding: 1.25rem 1rem; position: relative; }
+.step::after { content: '→'; position: absolute; right: -10px; top: 50%; transform: translateY(-50%); font-size: .9rem; color: #d1d5db; z-index: 1; }
+.step:last-child::after { display: none; }
+.step-n { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--forest-l); line-height: 1; margin-bottom: .3rem; }
+.step-title { font-family: 'Noto Sans JP', sans-serif; font-size: .75rem; font-weight: 700; color: var(--ink); margin-bottom: .4rem; }
+.step-body { font-family: 'Noto Sans JP', sans-serif; font-size: .68rem; color: #6b7280; line-height: 1.7; }
+
+/* ===== CHECK LIST ===== */
+.check-list { list-style: none; padding: 0; margin: 1rem 0; display: flex; flex-direction: column; gap: .4rem; }
+.check-list li { display: flex; gap: .65rem; align-items: flex-start; font-family: 'Noto Sans JP', sans-serif; font-size: .85rem; color: var(--ink-soft); line-height: 1.7; background: #fff; border: 1px solid var(--rule); border-radius: 5px; padding: .7rem .9rem; }
+.check-list li svg { flex-shrink: 0; margin-top: 2px; }
+
+/* ===== NUM STEPS ===== */
+.num-steps { display: flex; flex-direction: column; gap: 1rem; margin: 1.5rem 0; }
+.num-step { display: flex; gap: 1.25rem; align-items: flex-start; background: #fff; border: 1px solid var(--rule); border-radius: 8px; padding: 1.25rem; }
+.num-step.green { background: var(--forest-xl); border-color: #a7d4b8; }
+.num-n { flex-shrink: 0; font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--forest-l); line-height: 1; width: 40px; text-align: center; }
+.num-n.green { color: var(--forest); }
+.num-title { font-family: 'Noto Sans JP', sans-serif; font-weight: 700; font-size: .88rem; color: var(--ink); margin-bottom: .35rem; }
+.num-title.green { color: var(--forest); }
+.num-body { font-family: 'Noto Sans JP', sans-serif; font-size: .76rem; color: #6b7280; line-height: 1.8; }
+.num-body.green { color: #2d6a4f; }
+
+/* ===== CARDS ===== */
+.card3 { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 1rem; margin: 1.5rem 0; }
+.card { border: 1px solid var(--rule); border-radius: 8px; padding: 1.25rem; background: #fff; }
+.card-n { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--forest-l); margin-bottom: .4rem; }
+.card-title { font-family: 'Noto Sans JP', sans-serif; font-weight: 700; font-size: .82rem; color: var(--ink); margin-bottom: .4rem; }
+.card-body { font-family: 'Noto Sans JP', sans-serif; font-size: .74rem; color: #6b7280; line-height: 1.8; }
+.box3 { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; margin: 1.5rem 0; }
+.box3-item { background: #fff; padding: 1.5rem; }
+.box3-n { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 700; color: var(--forest-l); line-height: 1; margin-bottom: .5rem; }
+.box3-title { font-family: 'Noto Sans JP', sans-serif; font-weight: 700; font-size: .88rem; color: var(--ink); margin-bottom: .6rem; }
+.box3-body { font-family: 'Noto Sans JP', sans-serif; font-size: .76rem; color: #6b7280; line-height: 1.8; }
+
+/* ===== FEAT LIST ===== */
+.feat-list { display: flex; flex-direction: column; gap: 0; margin: 1.5rem 0; }
+.feat-row { display: grid; grid-template-columns: 80px 1fr; border: 1px solid var(--rule); overflow: hidden; border-bottom: none; }
+.feat-row:first-child { border-radius: 8px 8px 0 0; }
+.feat-row:last-child { border-radius: 0 0 8px 8px; border-bottom: 1px solid var(--rule); }
+.feat-icon { display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+.feat-body { background: #fff; padding: 1.25rem; }
+.feat-title { font-family: 'Noto Sans JP', sans-serif; font-weight: 700; font-size: .9rem; color: var(--ink); margin-bottom: .4rem; }
+.feat-text { font-family: 'Noto Sans JP', sans-serif; font-size: .76rem; color: #6b7280; line-height: 1.8; }
+
+/* ===== COLUMN GRID ===== */
+.col-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); gap: 1.25rem; margin: 1.5rem 0; }
+.col-card { display: block; text-decoration: none; color: inherit; background: #fff; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; transition: box-shadow .2s, transform .2s; }
+.col-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.1); transform: translateY(-2px); }
+.col-accent { height: 3px; background: var(--forest); }
+.col-body { padding: 1rem; }
+.col-tag { display: inline-block; background: var(--forest-l); color: var(--forest); font-family: 'Noto Sans JP', sans-serif; font-size: .62rem; font-weight: 700; padding: .1rem .5rem; border-radius: 3px; margin-bottom: .4rem; }
+.col-title { font-family: 'Noto Serif JP', serif; font-size: .8rem; font-weight: 700; color: var(--ink); line-height: 1.5; }
+.col-date { font-family: 'Noto Sans JP', sans-serif; font-size: .65rem; color: #9ca3af; margin-top: .4rem; }
+
+/* ===== UTILITIES ===== */
+.btn-w { display: inline-flex; align-items: center; gap: .5rem; background: #fff; color: var(--forest); font-family: 'Noto Sans JP', sans-serif; font-size: .88rem; font-weight: 700; padding: .9rem 2.2rem; border-radius: 4px; text-decoration: none; transition: background .2s; }
+.btn-w:hover { background: var(--forest-l); }
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity .55s, transform .55s; }
+.reveal.on { opacity: 1; transform: none; }
+.note-sm { font-family: 'Noto Sans JP', sans-serif; font-size: .68rem; color: #9ca3af; text-align: center; margin-top: .5rem; }
+.warn-text { font-family: 'Noto Sans JP', sans-serif; font-size: .72rem; color: #d97706; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="kanban-header">
+  <div class="kanban-inner">
+    <div class="kanban-left">
+      <div class="kanban-icon-wrap">
+        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        </svg>
+      </div>
+      <div class="kanban-brand">
+        <span class="kanban-label">GOURIKI Corporation</span>
+        <div class="kanban-title">GOURIKI<span>magazine</span></div>
+
+      </div>
+    </div>
+
+  </div>
+  <div class="kanban-divider"></div>
+</header>
+
+<!-- 第一章 -->
+<div class="chapter-banner" data-kanji="起">
+  <div class="banner-inner">
+    <div class="chapter-num">第一章</div>
+    <h2 class="chapter-h">機械式駐車場の<br><span>「平面化」</span>とは何か</h2>
+    <p class="chapter-sub">老朽化した機械設備を撤去し、平置き駐車場として再利用する——その実態は「設備の撤去」にとどまらず、地下ピット・排水・法規・合意形成まで絡む総合的な工事です。</p>
+  </div>
+</div>
+
+<div class="article">
+  <div class="section">
+    <h2 class="h2 reveal">平面化の<em>定義</em>と、その意味</h2>
+    <p class="p dropcap reveal">機械式駐車場の平面化とは、老朽化した機械設備を撤去し、路面を整地・舗装して平面（平置き）駐車場として再利用する改修のことです。「平面化」という言葉はシンプルですが、実際の工事は機械を外して地面をきれいにするだけではありません。撤去後に残る地下ピットや基礎、排水経路などを今後の利用に耐える状態へ作り替える「機能の再設計」まで含みます。</p>
+    <p class="p reveal">機械式は法定点検や保守契約が前提で、故障時には復旧まで使えない期間が発生します。平面化はこの構造的な弱点をなくし、設備依存を減らして運営をシンプルにする発想です。検討の出発点は、現状の稼働率・維持費・将来の更新費（入替）を整理し、更新を続けた場合と平面化した場合の長期収支を比べることです。</p>
+    <div class="stat-row reveal">
+      <div class="stat-cell"><div class="stat-n">18<span class="stat-u">〜20年</span></div><div class="stat-d">入替・平面化検討が現実的になる平均築年数</div></div>
+      <div class="stat-cell"><div class="stat-n">30<span class="stat-u">〜40%</span></div><div class="stat-d">都市部マンションの平均空き区画率</div></div>
+      <div class="stat-cell"><div class="stat-n">1,550<span class="stat-u">mm</span></div><div class="stat-d">多くの機械式の高さ制限（現在主流のSUVは入らない）</div></div>
+      <div class="stat-cell"><div class="stat-n">1<span class="stat-u">〜2億円</span></div><div class="stat-d">50台規模の機械式を「維持し続けた場合」の20年間推定コスト</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="h2 reveal">需要と設備の「ズレ」が<em>限界点に達している</em></h2>
+    <p class="p reveal">平面化が広がる背景には、「設備の寿命」「利用率の低下」「維持費・更新費の上昇」という複合的な問題があります。機械式駐車場は、築18〜20年あたりで入替や大規模修繕が現実味を帯びやすく、部品供給の終了が追い打ちになります。修理をしても根本解決にならず、費用だけが膨らむ局面に入りがちです。</p>
+    <p class="p reveal">一方で、車の保有状況や車種の変化により、機械式の制限に合わず使えない区画が増えると、空き区画が常態化します。稼働率が下がるほど、維持費を少数の利用者や全住戸で負担する不公平感が強まります。若年層の車離れ、在宅勤務の定着、カーシェアの普及で、分譲時に想定した契約率が維持できないケースが急増しています。</p>
+    <div class="pull-quote reveal">
+      <p>「更新を決める前に『そもそも必要台数はどれだけか』『別の形に変えるべきか』を検討する流れが、全国のマンションで強まっている。」</p>
+    </div>
+    <p class="p reveal">将来の見通しが立ちにくいことも平面化を後押しします。部品供給の終了リスク、事故や冠水への不安、電動化で求められる設備が変わる可能性など、長期的に同じ設備を維持する前提が崩れています。平面化は、こうした「読みにくい将来コスト」を「比較的読みやすい維持」に置き換えるための選択肢として注目されています。</p>
+  </div>
+
+  <div class="section">
+    <h2 class="h2 reveal">3つの<em>複合問題</em>が同時に進行している</h2>
+    <p class="p reveal">都市部を中心に、機械式駐車場問題は3つの問題が重なって発生しています。いずれも単独でも深刻ですが、多くのマンションではこの三つが連鎖しながら管理組合の財務基盤を蝕んでいきます。</p>
+    <div class="box3 reveal">
+      <div class="box3-item"><div class="box3-n">01</div><div class="box3-title">空き区画の恒常化</div><div class="box3-body">ライフスタイルの変化で稼働率が20〜40%まで低下。埋まらない区画は賃料収入の欠損を生み、維持費を全住戸が負担する不公平構造が生まれます。空きが増えるほど1台あたりの運営コスト負担は重くなる悪循環です。</div></div>
+      <div class="box3-item"><div class="box3-n">02</div><div class="box3-title">車両サイズの不一致</div><div class="box3-body">高さ制限1,550mm設計に対し、現在主流のSUV・ミニバンは1,600mm超。「敷地内に駐車場があるのに使えない」ミスマッチが、空き区画問題をさらに加速させます。需要があるのに収入が生まれない最悪の構造です。</div></div>
+      <div class="box3-item"><div class="box3-n">03</div><div class="box3-title">老朽化と部品廃番</div><div class="box3-body">設置から20年を超えると制御基板・モーターなどが廃番化。ひとたび重大な故障が起きれば修理不能となり、住民が突然「車が出せない」事態に直面します。残された道は全取替か、放置の二択です。</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 第二章 -->
+<div class="chapter-banner" data-kanji="承">
+  <div class="banner-inner">
+    <div class="chapter-num">第二章</div>
+    <h2 class="chapter-h">工法の選択が<br><span>完成後の運用</span>を決める</h2>
+    <p class="chapter-sub">撤去後のピットをどう扱うか——鋼製床で蓋をするか、土砂で埋めるか。この判断は工期・費用・リスク・将来の自由度を根本から変えます。「今安いか」だけで選ぶと、完成後に問題が起きます。</p>
+  </div>
+</div>
+
+<div class="article">
+  <div class="section">
+    <h2 class="h2 reveal">2工法の<em>構造的な違い</em>を理解する</h2>
+    <p class="p reveal">機械式駐車場の撤去後の平面化には、大きく「鋼製平面化（鋼製床工法）」と「砕石・土砂等で埋め戻す工法」があります。両者の最大の違いは、撤去後のピット空間をどう扱うかです。鋼製平面化は既存ピットを残したまま床を架け、埋め戻しはピットを材料で満たして地盤と一体化させます。見積金額だけで判断すると、後から追加工事や運用コストが発生することもあるため、工法の前提条件から比較することが不可欠です。</p>
+    <div class="table-wrap reveal">
+      <table>
+        <thead>
+          <tr><th>比較項目</th><th>鋼製平面化工法</th><th>埋め戻し工法</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>初期工事費</td><td><span class="by">やや高め</span> 鋼材費が影響</td><td><span class="bg">比較的安価</span> 条件良好時</td></tr>
+          <tr><td>工事期間</td><td><span class="bg">短い</span></td><td><span class="by">やや長め</span> 養生・転圧期間</td></tr>
+          <tr><td>軟弱地盤・屋内</td><td><span class="bg">対応可</span></td><td><span class="br">原則困難</span></td></tr>
+          <tr><td>地盤沈下・陥没</td><td><span class="bg">リスクなし</span></td><td><span class="br">リスクあり</span></td></tr>
+          <tr><td>排水計画</td><td><span class="bg">ポンプ継続利用可</span></td><td><span class="br">再設計要</span></td></tr>
+          <tr><td>将来の転用</td><td><span class="bg">容易</span></td><td><span class="br">困難</span></td></tr>
+          <tr><td>EV充電器設置</td><td><span class="bg">容易</span></td><td><span class="bg">容易</span></td></tr>
+          <tr><td>長期維持管理</td><td><span class="by">排水ポンプのメンテナンス必要</span></td><td><span class="bg">ほぼゼロ</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note-sm">※GOURIKIでは無料の現地調査をもとに最適工法をご提案します。</p>
+  </div>
+
+  <div class="section">
+    <h2 class="h2 reveal">鋼製平面化工法　詳細解説<em>詳細解説</em></h2>
+    <p class="p reveal">鋼製平面化（鋼製床工法）は、機械式駐車装置を解体・撤去した後も、既存のピット（コンクリート躯体）を撤去せずに残し、基礎として再利用する工法です。ピット内にアンカーを打設し、柱・梁となる鉄骨を固定したうえで鋼製床板などの床材を敷設して平面化します。埋め戻しのように大量の土砂や砕石を搬入して締固める工程が発生しにくく、構造物としても比較的軽量に仕上げやすいのが特徴です。</p>
+    <p class="p reveal">地盤への負担を抑えたい現場や、屋内など作業制約が大きい現場で採用されやすくなります。将来、駐車需要が戻って機械式の再設置や別用途への転用を検討する可能性がある場合も、ピットが残る鋼製平面化は柔軟性を持ちやすい工法です。</p>
+    <h3 class="h3 reveal">施工の標準的な流れ</h3>
+    <div class="steps-wrap reveal">
+      <div class="steps">
+        <div class="step"><div class="step-n">01</div><div class="step-title">利用停止・安全養生</div><div class="step-body">住民への周知、立入禁止措置、仮設誘導員配置</div></div>
+        <div class="step"><div class="step-n">02</div><div class="step-title">装置解体・搬出</div><div class="step-body">機械式装置の切断・解体・スクラップ搬出。重機・クレーン計画が要</div></div>
+        <div class="step"><div class="step-n">03</div><div class="step-title">ピット整備・アンカー打設</div><div class="step-body">ピット内清掃・排水設備確認・鉄骨固定用アンカー打設</div></div>
+        <div class="step"><div class="step-n">04</div><div class="step-title">鉄骨組立・床材敷設</div><div class="step-body">柱・梁組立・鋼製床板設置・防滑処理</div></div>
+        <div class="step"><div class="step-n">05</div><div class="step-title">仕上げ・引渡し</div><div class="step-body">区画ライン・車止め設置・清掃・検査・引渡し</div></div>
+      </div>
+    </div>
+    <div class="forest-box reveal">
+      <strong>GOURIKIコーポレーションの鋼製平面駐車場サービス【SMART DECK】が選ばれる理由</strong>
+      <p>特許 第7681455号を取得したGOURIKIのスマートデッキ工法は、鋼材の品質・支持構造・床の耐荷重・防錆仕様を一体で設計し、施工後の沈下やたわみを起こさない構造的な精度が強みです。短工期・軽量・将来転用可能という三つの要件を同時に満たす工法として、全国のマンション管理組合から採用されています。</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="h2 reveal">埋め戻し工法の<em>構造と注意点</em></h2>
+    <p class="p reveal">埋め戻し工法は、機械式駐車装置の撤去後に残るピット空間を、砕石・土砂・流動化処理土・コンクリートなどで埋め、転圧・締固めを行ったうえでアスファルトやコンクリートで平面仕上げする一般的な方法です。見た目が通常の地面に近くなり、排水ポンプなどの設備を残さない計画にしやすい点が特徴です。</p>
+    <p class="p reveal">一方で、重要なのが地耐力や沈下リスクの評価です。埋め戻し材の選定、締固め方法、層厚管理が不十分だと、舗装の不陸や沈下が起き、区画ラインや車止めのやり直しが必要になることがあります。</p>
+    <h3 class="h3 reveal">埋め戻し向きの現場条件</h3>
+    <ul class="check-list reveal">
+      <li><i data-lucide="check" style="color:#16a34a;width:15px;height:15px;"></i>屋外で地盤条件が良好（N値が十分確保されている）</li>
+      <li><i data-lucide="check" style="color:#16a34a;width:15px;height:15px;"></i>
+        <div>排水ポンプを完全撤去して維持管理項目をゼロにしたい<br>
+        <span class="warn-text">⚠ ただし、行政へ排水計画変更の届出必要</span></div>
+      </li>
+      <li><i data-lucide="check" style="color:#16a34a;width:15px;height:15px;"></i>重機・大型車両の搬入経路が確保できている</li>
+      <li><i data-lucide="check" style="color:#16a34a;width:15px;height:15px;"></i>将来の転用・復元の予定がない</li>
+    </ul>
+    <div class="note-box reveal">
+      <strong>⚠ 「埋め戻しは必ず安い」は誤解</strong>
+      <p>処分費、埋め戻し材、転圧手間、雨水処理の追加工事の有無で、鋼製平面化よりコストが高くなることがあります。見積もり比較では、埋め戻しの範囲と層厚、転圧方法、排水経路の具体策まで明記されているかを確認することで、後からの増額リスクを下げられます。</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="h2 reveal">見落とされがちな<em>「排水ポンプ」問題</em></h2>
+    <p class="p reveal">機械式駐車場を平面化する際、見落とされがちなのが「ピットに溜まる水」と「排水ポンプ」の扱いです。工事が完了しても、流入水が続けばポンプの点検・更新や停電時の対応が必要になり、運用コストとリスクに直結します。</p>
+    <p class="p reveal">ピットへの流入水は工事後もゼロにならないことが多く、放置すると目に見えない形で劣化とトラブルが進みます。ピットに水が溜まる主因は、雨水の流入、地中からの湧水、コンクリート躯体のひび割れや目地からの浸透水です。</p>
+    <div class="pull-quote reveal">
+      <p>「排水は工法の付属ではなく、工法選定の判断軸として同列に扱うべき問題だ。」</p>
+    </div>
+    <h3 class="h3 reveal">排水ポンプの3つの対応パターン</h3>
+    <div class="card3 reveal">
+      <div class="card"><div class="card-n">A</div><div class="card-title">既存ポンプを更新して継続</div><div class="card-body">流入が続く現場で最も現実的。信頼性確保のため二重化・高水位警報も検討。停電時の対応方針も同時に決める。</div></div>
+      <div class="card"><div class="card-n">B</div><div class="card-title">撤去して地上排水に切替</div><div class="card-body">主に埋め戻し工法向け。地表勾配・集水桝・排水管の整備がセット。完成後に水たまりが残らない設計が必要。</div></div>
+      <div class="card"><div class="card-n">C</div><div class="card-title">新設で二重化・警報強化</div><div class="card-body">停電時の許容度が低い施設向け。発電機連動・遠隔通報システムも合わせて導入することで信頼性を最大化。</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 第三章 -->
+<div class="chapter-banner" data-kanji="転">
+  <div class="banner-inner">
+    <div class="chapter-num">第三章</div>
+    <h2 class="chapter-h">「技術的にできる」と<br><span>「制度上できる」</span>は別問題</h2>
+    <p class="chapter-sub">平面化は工事だけではありません。附置義務条例の確認、総会での特別決議、住民への説明——法規と合意形成のプロセスが、工事と同じくらい成否を左右します。</p>
+  </div>
+</div>
+
+<div class="article">
+  <div class="section">
+    <h2 class="h2 reveal">プロジェクト全体の<em>5つのステップ</em></h2>
+    <p class="p reveal">平面化は技術検討と同じくらい、法規確認と合意形成の設計が成否を左右します。まず必要台数の推計を行い、次に法的に台数を減らせるかを確認します。そのうえで複数案を同条件で比較し、費用と影響を見える化して住民に提示します。</p>
+    <div class="num-steps reveal">
+      <div class="num-step"><div class="num-n">1</div><div><div class="num-title">現地調査・稼働率と費用の整理</div><div class="num-body">現在の稼働率・年間維持費・将来の更新費を数字で整理。ピット深さ・地盤条件・排水設備の状態を無料調査。「更新した場合」と「平面化した場合」の20年収支を管理組合で比較できる状態にすることが最初のゴールです。</div></div></div>
+      <div class="num-step"><div class="num-n">2</div><div><div class="num-title">法規確認・行政協議</div><div class="num-body">附置義務条例・建築基準法の確認を行い、プロジェクトの前倒し短縮につながります。</div></div></div>
+      <div class="num-step"><div class="num-n">3</div><div><div class="num-title">住民説明会・総会特別決議</div><div class="num-body">理事会向け説明会と全住民向け説明会の2段階実施も可能。管理組合側で数字を示しながら、感情論ではなく数字ベースで議論の土台を整えます。</div></div></div>
+      <div class="num-step"><div class="num-n">4</div><div><div class="num-title">業者選定・契約・着工準備</div><div class="num-body">見積もりは複数社から取得し、同条件で比較します。追加費用の発生条件・排水設計の具体策・近隣対応体制が明記されているかを確認。住民への工程カレンダー配布・代替駐車場の手配も並行して進めます。</div></div></div>
+      <div class="num-step green"><div class="num-n green">5</div><div><div class="num-title green">工事実施・引渡し・運用開始</div><div class="num-body green">安全・迅速な立体駐車場解体と平面駐車場工事。引渡し後は管理組合側で排水設備の点検方法・停電時対応・異常時連絡先を運用ルール化し、住民への説明資料も整備します。</div></div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="h2 reveal">附置義務条例と<em>行政協議</em></h2>
+    <p class="p reveal">台数を減らせるかどうかは、建物ごとの事情だけでなく、自治体の附置義務条例や建築基準法上の扱いで変わります。特に都市部では、周辺道路への影響を理由に付置率が定められていることがあり、単純に「空いているから減らす」が通らない場合があります。</p>
+    <p class="p reveal">重要なのは、管理組合内の議論より先に行政協議で見通しを取りに行くことです。緩和の可否、代替措置の必要性、求められる書類、手続き期間を確認し、総会決議との前後関係を整理します。</p>
+    <ul class="check-list reveal">
+      <li><i data-lucide="check-circle" style="color:#16a34a;width:15px;height:15px;"></i>附置義務条例の台数要件を自治体窓口で確認</li>
+      <li><i data-lucide="check-circle" style="color:#16a34a;width:15px;height:15px;"></i>管理規約の条文（特別決議 or 普通決議）確認</li>
+      <li><i data-lucide="check-circle" style="color:#16a34a;width:15px;height:15px;"></i>緩和の可否・代替措置・手続き期間を行政協議で把握</li>
+      <li><i data-lucide="check-circle" style="color:#16a34a;width:15px;height:15px;"></i>排水設備の変更に伴う届出・許可の確認</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2 class="h2 reveal">業者選定で<em>見るべき視点</em></h2>
+    <ul class="check-list reveal">
+      <li><i data-lucide="check-circle" style="color:#16a34a;width:15px;height:15px;"></i><div><strong>実績件数と施工範囲の確認</strong><br><span style="font-family:'Noto Sans JP',sans-serif;">機械式駐車場の解体・平面化の施工実績が豊富か。施工事例の写真・規模・工法を確認する。</span></div></li>
+      <li><i data-lucide="check-circle" style="color:#16a34a;width:15px;height:15px;"></i><div><strong>見積の明細が明瞭か　見積書の詳細が工程ごとに細かく分かれて明記されているかを確認する</strong><br><span style="font-family:'Noto Sans JP',sans-serif;">追加費用が発生する条件・地中障害物の扱い・排水設計の具体策が書かれているかを確認する。</span></div></li>
+      <li><i data-lucide="check-circle" style="color:#16a34a;width:15px;height:15px;"></i><div><strong>複数社で同条件の比較が可能か</strong><br><span style="font-family:'Noto Sans JP',sans-serif;">前提条件を揃えないと比較に意味がない。各社に同じ調査情報を提供したうえで見積もりを取る。</span></div></li>
+      <li><i data-lucide="check-circle" style="color:#16a34a;width:15px;height:15px;"></i><div><strong>住民・近隣への対応体制が整っているか</strong><br><span style="font-family:'Noto Sans JP',sans-serif;">周知文の作成サポート、近隣クレームへの対応体制を確認する。</span></div></li>
+      <li><i data-lucide="check-circle" style="color:#16a34a;width:15px;height:15px;"></i><div><strong>保証内容・アフターフォローが明確か</strong><br><span style="font-family:'Noto Sans JP',sans-serif;">保証期間と対応範囲が契約書に明記されているか確認する。</span></div></li>
+    </ul>
+  </div>
+</div>
+
+<!-- 第四章 -->
+<div class="chapter-banner" data-kanji="結">
+  <div class="banner-inner">
+    <div class="chapter-num">第四章</div>
+    <h2 class="chapter-h">平面化した空間を、<br><span>次世代の資産</span>へ変える</h2>
+    <p class="chapter-sub">完成は終わりではなく始まりです。EV充電・カーシェア・多目的活用——平面化後の運用設計まで含めて初めて、投資効果が最大化されます。</p>
+  </div>
+</div>
+
+<div class="article">
+  <div class="section">
+    <h2 class="h2 reveal">平面化後の空間活用<em>4つの方向性</em></h2>
+    <p class="p reveal">平面化によって生まれた空間は「普通の駐車場」にとどまる必要はありません。機械式のままでは事実上設置不可能だったEV充電器の導入や、カーシェアリング設備の整備など、マンションが今後10〜20年にわたって「選ばれ続ける」ための機能を搭載する好機です。</p>
+    <div class="feat-list reveal">
+      <div class="feat-row">
+        <div class="feat-icon" style="background:var(--forest);"><i data-lucide="battery-charging" style="color:#fff;width:28px;height:28px;"></i></div>
+        <div class="feat-body"><div class="feat-title">EV充電インフラの整備</div><div class="feat-text">機械式のままでは配線ルートの確保が困難で、事実上設置不可能な場合がほとんどです。平面化で初めて本格的なEV充電設備が整備できます。2030年以降に向けた資産価値の底上げに直結します。</div></div>
+      </div>
+      <div class="feat-row">
+        <div class="feat-icon" style="background:var(--forest-m);"><i data-lucide="car" style="color:#fff;width:28px;height:28px;"></i></div>
+        <div class="feat-body"><div class="feat-title">カーシェアリング設備</div><div class="feat-text">空き区画をカーシェア車両置き場として活用。車を持たない居住者への付加価値を創出し、「カーシェアが使えるマンション」として差別化できます。</div></div>
+      </div>
+      <div class="feat-row">
+        <div class="feat-icon" style="background:#1f2937;"><i data-lucide="sun" style="color:#fff;width:28px;height:28px;"></i></div>
+        <div class="feat-body"><div class="feat-title">景観と居住環境の改善</div><div class="feat-text">巨大な鉄の構造物が消えて光と風が通る開放的な空間へ生まれ変わります。エントランス周辺の景観が向上し、居住者の日々の満足度と来訪者の印象が改善されます。</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="h2 reveal">駐車場平面化カテゴリ<em>関連コラム</em></h2>
+    <p class="p reveal">管理組合が実際に直面するリアルな課題と解決プロセスを発信しています。技術的な解説から、合意形成のノウハウ、工事後の活用まで網羅しています。</p>
+    <div class="col-grid reveal">
+      <a href="https://gouriki.co.jp/column/%e3%83%9e%e3%83%b3%e3%82%b7%e3%83%a7%e3%83%b3%e9%a7%90%e8%bb%8a%e5%a0%b4%e3%81%ae%e5%b9%b3%e9%9d%a2%e5%8c%96%e5%b7%a5%e4%ba%8b%e5%be%8c%e3%81%ab%e3%81%a7%e3%81%8d%e3%82%8b%e3%82%b9%e3%83%9a%e3%83%bc/" target="_blank" class="col-card"><div class="col-accent"></div><div class="col-body"><span class="col-tag">スペース活用</span><p class="col-title">マンション駐車場の平面化工事後にできるスペース活用術</p><p class="col-date">2026.03.03</p></div></a>
+      <a href="https://gouriki.co.jp/column/%e6%98%87%e9%99%8d%e5%bc%8f%e9%a7%90%e8%bb%8a%e5%a0%b4%e3%81%ae%e6%92%a4%e5%8e%bb%e3%82%92%e5%ae%89%e5%85%a8%e3%81%ab%e9%80%b2%e3%82%81%e3%82%8b%e3%83%9d%e3%82%a4%e3%83%b3%e3%83%88/" target="_blank" class="col-card"><div class="col-accent"></div><div class="col-body"><span class="col-tag">安全管理</span><p class="col-title">昇降式駐車場の撤去を安全に進めるポイント</p><p class="col-date">2026.03.03</p></div></a>
+      <a href="https://gouriki.co.jp/column/%e9%a7%90%e8%bb%8a%e5%a0%b4%e5%b9%b3%e9%9d%a2%e5%8c%96%e5%b7%a5%e4%ba%8b%e3%81%ae%e3%83%94%e3%83%83%e3%83%88%e6%8e%92%e6%b0%b4%e3%83%9d%e3%83%b3%e3%83%97%e5%af%be%e7%ad%96/" target="_blank" class="col-card"><div class="col-accent"></div><div class="col-body"><span class="col-tag">排水対策</span><p class="col-title">駐車場平面化工事のピット排水ポンプ対策</p><p class="col-date">2026.03.03</p></div></a>
+      <a href="https://gouriki.co.jp/column/%e5%9c%b0%e4%b8%8b%e3%81%ab%e3%81%82%e3%82%8b%e3%83%9e%e3%83%b3%e3%82%b7%e3%83%a7%e3%83%b3%e6%a9%9f%e6%a2%b0%e5%bc%8f%e9%a7%90%e8%bb%8a%e5%a0%b4%e3%81%ae%e5%b9%b3%e9%9d%a2%e5%8c%96%e5%b7%a5%e4%ba%8b/" target="_blank" class="col-card"><div class="col-accent"></div><div class="col-body"><span class="col-tag">地下駐車場</span><p class="col-title">地下にあるマンション機械式駐車場の平面化工事とは？</p><p class="col-date">2026.03.02</p></div></a>
+      <a href="https://gouriki.co.jp/column/%e3%83%9e%e3%83%b3%e3%82%b7%e3%83%a7%e3%83%b3%e3%81%ae%e9%a7%90%e8%bb%8a%e5%a0%b4%e5%b9%b3%e9%9d%a2%e5%8c%96%e3%81%a8ev%e5%85%85%e9%9b%bb%e5%99%a8%e5%b0%8e%e5%85%a5%e3%81%ae%e9%80%b2%e3%82%81%e6%96%b9/" target="_blank" class="col-card"><div class="col-accent"></div><div class="col-body"><span class="col-tag">EV充電</span><p class="col-title">マンションの駐車場平面化とEV充電器導入の進め方</p><p class="col-date">2026.03.02</p></div></a>
+      <a href="https://gouriki.co.jp/column/%e9%8b%bc%e8%a3%bd%e5%b9%b3%e9%9d%a2%e9%a7%90%e8%bb%8a%e5%a0%b4%ef%bc%88%e9%8b%bc%e8%a3%bd%e5%b9%b3%e9%9d%a2%e5%8c%96%e3%83%bb%e9%8b%bc%e8%a3%bd%e5%ba%8a%e5%b7%a5%e6%b3%95%ef%bc%89%e3%81%a8%e3%81%af/" target="_blank" class="col-card"><div class="col-accent"></div><div class="col-body"><span class="col-tag">鋼製平面化</span><p class="col-title">鋼製平面駐車場（鋼製平面化・鋼製床工法）とは？仕組みと選び方</p><p class="col-date">2026.02.24</p></div></a>
+    </div>
+    <div style="text-align:right;margin-top:1rem;">
+      <a href="https://gouriki.co.jp/column_category/flattening/" target="_blank" style="font-family:'Noto Sans JP',sans-serif;font-size:.78rem;color:var(--forest);font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:.3rem;">
+        駐車場平面化コラムをすべて見る <i data-lucide="external-link" style="width:13px;height:13px;"></i>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div style="position:relative;overflow:hidden;background:#1b4332;padding:4rem 1.5rem;">
+  <div style="position:absolute;inset:0;background-image:url('https://gouriki.co.jp/wp-content/themes/gouriki-hp/handbook/images/main_img.png');background-size:cover;background-position:center;opacity:.08;"></div>
+  <div style="max-width:700px;margin:0 auto;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1.25rem;">
+    <p style="font-family:'Noto Sans JP',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.2em;color:#52b788;">HANDBOOK</p>
+    <p style="font-family:'Noto Serif JP',serif;font-size:1.4rem;font-weight:700;color:#fff;line-height:1.7;">駐車場平面化 実務ガイドブック</p>
+    <p style="font-family:'Noto Sans JP',sans-serif;font-size:.78rem;color:rgba(255,255,255,.55);line-height:1.9;">工法比較・費用目安・合意形成のポイントをまとめた無料資料です。</p>
+    <a href="https://gouriki.co.jp/handbook/" target="_blank" class="btn-w"><i data-lucide="download" style="width:15px;height:15px;"></i> 無料ダウンロード</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer style="background:#111827;color:rgba(255,255,255,.65);padding:4rem 1.5rem;">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:3rem;border-bottom:1px solid #374151;padding-bottom:3rem;margin-bottom:3rem;">
+
+      <div>
+        <img src="https://gouriki.co.jp/wp-content/themes/gouriki-hp/images/logo-white.png" alt="GOURIKI" style="height:40px;width:auto;margin-bottom:1.5rem;" onerror="this.src='https://gouriki.co.jp/wp-content/themes/gouriki-hp/images/logo.png'">
+        <h4 style="font-family:'Noto Sans JP',sans-serif;font-weight:700;font-size:.95rem;margin-bottom:1rem;color:#fff;">株式会社GOURIKIコーポレーション</h4>
+        <div style="display:flex;flex-direction:column;gap:.75rem;font-size:.72rem;color:rgba(255,255,255,.55);">
+          <div>
+            <p style="font-family:'Noto Sans JP',sans-serif;font-weight:700;color:#fff;margin-bottom:.2rem;">本社所在地</p>
+            <p>〒134-0085 東京都江戸川区南葛西6-13-14</p>
+            <p>TEL: 03-3877-0993</p>
+          </div>
+          <div>
+            <p style="font-family:'Noto Sans JP',sans-serif;font-weight:700;color:#fff;margin-bottom:.2rem;">千葉工場</p>
+            <p>〒275-0001 千葉県習志野市東習志野7-1-1</p>
+          </div>
+          <div>
+            <p><span style="font-family:'Noto Sans JP',sans-serif;font-weight:700;color:#fff;">代表取締役:</span> 山﨑 剛</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p style="font-family:'Noto Sans JP',sans-serif;font-weight:700;margin-bottom:1.5rem;border-left:4px solid #e67e22;padding-left:.5rem;color:#fff;">Links</p>
+        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:.75rem;font-size:.875rem;">
+          <li><a href="https://gouriki.co.jp/about/" style="color:rgba(255,255,255,.55);text-decoration:none;display:flex;align-items:center;gap:.25rem;" onmouseover="this.style.color='#e67e22'" onmouseout="this.style.color='rgba(255,255,255,.55)'"><i data-lucide="chevron-right" style="width:16px;height:16px;"></i>会社案内</a></li>
+          <li><a href="https://gouriki.co.jp/smart-deck/" style="color:rgba(255,255,255,.55);text-decoration:none;display:flex;align-items:center;gap:.25rem;" onmouseover="this.style.color='#e67e22'" onmouseout="this.style.color='rgba(255,255,255,.55)'"><i data-lucide="chevron-right" style="width:16px;height:16px;"></i>SMART DECK</a></li>
+          <li><a href="https://gouriki.co.jp/ai-parking/" style="color:rgba(255,255,255,.55);text-decoration:none;display:flex;align-items:center;gap:.25rem;" onmouseover="this.style.color='#e67e22'" onmouseout="this.style.color='rgba(255,255,255,.55)'"><i data-lucide="chevron-right" style="width:16px;height:16px;"></i>AI PARKING</a></li>
+          <li><a href="https://gouriki.co.jp/case/" style="color:rgba(255,255,255,.55);text-decoration:none;display:flex;align-items:center;gap:.25rem;" onmouseover="this.style.color='#e67e22'" onmouseout="this.style.color='rgba(255,255,255,.55)'"><i data-lucide="chevron-right" style="width:16px;height:16px;"></i>施工事例</a></li>
+          <li><a href="https://gouriki.co.jp/column/" style="color:rgba(255,255,255,.55);text-decoration:none;display:flex;align-items:center;gap:.25rem;" onmouseover="this.style.color='#e67e22'" onmouseout="this.style.color='rgba(255,255,255,.55)'"><i data-lucide="chevron-right" style="width:16px;height:16px;"></i>コラム</a></li>
+          <li><a href="https://gouriki.co.jp/news/" style="color:rgba(255,255,255,.55);text-decoration:none;display:flex;align-items:center;gap:.25rem;" onmouseover="this.style.color='#e67e22'" onmouseout="this.style.color='rgba(255,255,255,.55)'"><i data-lucide="chevron-right" style="width:16px;height:16px;"></i>お知らせ</a></li>
+        </ul>
+      </div>
+
+      <div style="grid-column:span 2;">
+        <p style="font-family:'Noto Sans JP',sans-serif;font-weight:700;margin-bottom:1.5rem;border-left:4px solid #e67e22;padding-left:.5rem;color:#fff;">主要特許</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;font-size:.72rem;color:rgba(255,255,255,.55);">
+          <div style="background:rgba(255,255,255,.05);padding:.75rem;border-radius:4px;border:1px solid rgba(255,255,255,.1);"><p style="font-family:'Noto Sans JP',sans-serif;font-weight:700;color:#fff;">特許 第7681455号</p><p>名称：スマートデッキ</p></div>
+          <div style="background:rgba(255,255,255,.05);padding:.75rem;border-radius:4px;border:1px solid rgba(255,255,255,.1);"><p style="font-family:'Noto Sans JP',sans-serif;font-weight:700;color:#fff;">特許 第7681454号</p><p>名称：スマートボックス</p></div>
+          <div style="background:rgba(255,255,255,.05);padding:.75rem;border-radius:4px;border:1px solid rgba(255,255,255,.1);"><p style="font-family:'Noto Sans JP',sans-serif;font-weight:700;color:#fff;">特許 第7223962号</p><p>名称：車室認証プログラム及び車室認証装置</p></div>
+          <div style="background:rgba(255,255,255,.05);padding:.75rem;border-radius:4px;border:1px solid rgba(255,255,255,.1);"><p style="font-family:'Noto Sans JP',sans-serif;font-weight:700;color:#fff;">特許 第7277879号</p><p>名称：ナンバープレート認識プログラム及びナンバープレート認識装置</p></div>
+        </div>
+      </div>
+
+    </div>
+    <div style="display:flex;justify-content:center;gap:1rem;margin-bottom:1.5rem;">
+      <a href="https://www.youtube.com/@gouriki" target="_blank" style="display:flex;align-items:center;gap:.5rem;background:#dc2626;color:#fff;font-family:'Noto Sans JP',sans-serif;font-weight:700;font-size:.875rem;padding:.6rem 1.25rem;border-radius:9999px;text-decoration:none;">
+        <svg style="width:20px;height:20px;flex-shrink:0;" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        YouTube Official
+      </a>
+      <a href="https://www.instagram.com/gourikicorporation/" target="_blank" style="display:flex;align-items:center;gap:.5rem;color:#fff;font-family:'Noto Sans JP',sans-serif;font-weight:700;font-size:.875rem;padding:.6rem 1.25rem;border-radius:9999px;text-decoration:none;background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);">
+        <svg style="width:20px;height:20px;flex-shrink:0;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+        Instagram Official
+      </a>
+    </div>
+    <p style="text-align:center;font-size:.625rem;color:#9ca3af;">&copy; 2026 株式会社GOURIKIコーポレーション All Rights Reserved.</p>
+  </div>
+</footer>
+
+<script>
+lucide.createIcons();
+document.querySelectorAll('.reveal').forEach(el => {
+  new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('on'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 }).observe(el);
+});
+</script>
+</body>
+</html>

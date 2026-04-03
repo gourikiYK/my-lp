@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>マンション管理組合のための機械式駐車場問題解決ガイド | GOURIKI（剛力）</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
+
+        html { scroll-behavior: smooth; font-size: 22px; }
+        body { font-family: 'Noto Sans JP', sans-serif; color: #222; line-height: 2.2; }
+
+        .text-xs { font-size: 0.85rem !important; }
+        .text-sm { font-size: 0.95rem !important; }
+
+        .section-inner { max-width: 960px; margin: 0 auto; padding: 0 2rem; }
+
+        .bg-gouriki-navy  { background-color: #002B5B; }
+        .text-gouriki-navy { color: #002B5B; }
+        .bg-gouriki-accent { background-color: #E67E22; }
+        .text-gouriki-accent { color: #E67E22; }
+
+        .kanban-header {
+            background: #002B5B;
+            border-bottom: 4px solid #E67E22;
+            position: relative;
+            overflow: hidden;
+        }
+        .kanban-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(-55deg, transparent, transparent 40px, rgba(255,255,255,0.02) 40px, rgba(255,255,255,0.02) 80px);
+        }
+        .kanban-inner {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 1.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .kanban-left { display: flex; align-items: center; gap: 1.25rem; }
+        .kanban-icon-wrap {
+            width: 52px; height: 52px;
+            background: #E67E22;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(230,126,34,0.4);
+        }
+        .kanban-brand { display: flex; flex-direction: column; gap: 0.2rem; }
+        .kanban-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.18em; color: #E67E22; text-transform: uppercase; }
+        .kanban-title { font-size: 1.45rem; font-weight: 900; color: #fff; letter-spacing: 0.04em; line-height: 1.2; }
+        .kanban-title span { color: #E67E22; }
+        .kanban-sub { font-size: 0.65rem; color: rgba(255,255,255,0.45); letter-spacing: 0.08em; margin-top: 0.15rem; }
+        .kanban-tagline {
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.6);
+            border-left: 2px solid #E67E22;
+            padding-left: 0.75rem;
+            line-height: 1.6;
+            max-width: 320px;
+        }
+        .kanban-tagline strong { color: #fff; display: block; font-size: 0.82rem; margin-bottom: 0.2rem; }
+        .kanban-divider {
+            height: 1px;
+            background: linear-gradient(to right, rgba(255,255,255,0.08), rgba(230,126,34,0.3), rgba(255,255,255,0.08));
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .ba-slider { position: relative; width: 100%; height: 400px; overflow: hidden; border-radius: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+        .ba-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.2s ease-in-out; }
+        .ba-image.active { opacity: 1; }
+        .ba-label { position: absolute; top: 1.5rem; left: 1.5rem; padding: 0.6rem 1.2rem; color: white; font-weight: bold; font-size: 0.9rem; border-radius: 50px; z-index: 10; transition: opacity 0.5s ease; }
+
+        .faq-card { background: #fff; border-radius: 8px; border-left: 4px solid #E67E22; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 1rem; overflow: hidden; }
+        .faq-question { padding: 1.25rem 1.5rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; padding: 0 1.5rem; background-color: #fcfcfc; }
+        .faq-card.active .faq-answer { max-height: 600px; padding: 0 1.5rem 1.5rem; }
+        .faq-icon { transition: transform 0.3s ease; }
+        .faq-card.active .faq-icon { transform: rotate(180deg); }
+
+        .info-card { background: white; border-radius: 12px; border: 1px solid #edf2f7; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .flow-step { position: relative; }
+        .flow-step:not(:last-child)::after { content: ''; position: absolute; bottom: -2rem; left: 50%; transform: translateX(-50%); width: 2px; height: 2rem; background: #E67E22; }
+        .keyword-tag { display: inline-block; background: #fff3e8; color: #E67E22; border: 1px solid #f5c89a; border-radius: 4px; font-size: 0.85rem; font-weight: bold; padding: 0.2rem 0.7rem; }
+
+        .compare-table th { background-color: #002B5B; color: white; padding: 0.9rem 1.1rem; text-align: center; font-size: 1rem; }
+        .compare-table td { padding: 0.9rem 1.1rem; text-align: center; font-size: 0.95rem; border-bottom: 1px solid #e2e8f0; }
+        .compare-table tr:last-child td { border-bottom: none; }
+        .compare-table tr:nth-child(even) td { background-color: #f8fafc; }
+        .td-smartdeck  { background-color: #fff8f3 !important; }
+        .td-umemodoshi { background-color: #f0f9ff !important; }
+        .badge-merit   { display: inline-block; background: #d1fae5; color: #065f46; border-radius: 4px; padding: 0.2rem 0.6rem; font-size: 0.85rem; font-weight: bold; }
+        .badge-demerit { display: inline-block; background: #fee2e2; color: #991b1b; border-radius: 4px; padding: 0.2rem 0.6rem; font-size: 0.85rem; font-weight: bold; }
+        .badge-neutral { display: inline-block; background: #e0f2fe; color: #0c4a6e; border-radius: 4px; padding: 0.2rem 0.6rem; font-size: 0.85rem; font-weight: bold; }
+
+        .text-left-force { text-align: left !important; }
+        .text-sm  { font-size: 1rem !important; }
+        .text-xs  { font-size: 0.9rem !important; }
+    </style>
+</head>
+<body id="top" class="bg-white">
+
+    <header class="kanban-header">
+        <div class="kanban-inner">
+            <div class="kanban-left">
+                <div class="kanban-icon-wrap">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                </div>
+                <div class="kanban-brand">
+                    <span class="kanban-label">GOURIKI Corporation</span>
+                    <div class="kanban-title">GOURIKI<span>magazine</span></div>
+                    <div class="kanban-sub">マンション管理組合のための専門情報誌</div>
+                </div>
+            </div>
+            <div class="kanban-tagline">
+                <strong>機械式駐車場問題を、解決へ。</strong>
+                空き・老朽化・コスト増——三重苦を抱えるマンション管理組合に向けた、実践的な解決策をお届けします。
+            </div>
+        </div>
+        <div class="kanban-divider"></div>
+    </header>
+
+    <section id="problem" class="py-24 px-8 bg-slate-50">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-left text-gouriki-navy mb-4">
+                築20年、あなたのマンションで<br class="hidden md:block">起きている「駐車場離れ」の真実
+            </h2>
+            <div class="bg-orange-50 border-l-4 border-orange-400 rounded-r-xl px-6 py-4 mb-16">
+                <p class="text-gray-700 text-sm md:text-base leading-relaxed">都市部を中心に、<strong>マンション機械式駐車場問題</strong>は静かに、しかし確実に深刻化しています。車離れ・車両の大型化・設備の老朽化という三重苦が重なり、今や多くの<strong>マンション管理組合</strong>が「このままでは立ち行かない」という局面を迎えています。</p>
+            </div>
+            <div class="flex flex-col gap-3">
+                <div class="bg-white p-5 shadow-sm rounded-lg border-l-4 border-slate-200 flex gap-6 items-start">
+                    <div class="flex flex-col flex-grow">
+                        <span class="keyword-tag inline-block mb-2 self-start">マンション駐車場空き問題</span>
+                        <h3 class="font-bold text-xl mb-3 text-gouriki-navy">空き区画の恒常化</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed mb-3">都心部を中心にライフスタイルの変化による「車離れ」が加速しています。かつては抽選になるほどだった駐車場も、今や23区の多くのマンションで20〜40%近い空き区画が常態化しています。</p>
+                        <p class="text-gray-600 text-sm leading-relaxed italic border-l-2 border-slate-200 pl-3">埋まらない区画は「賃料収入の欠損」を意味し、<strong>マンション管理組合</strong>の運営基盤をじわじわと蝕んでいきます。</p>
+                    </div>
+                </div>
+                <div class="bg-white p-5 shadow-sm rounded-lg border-l-4 border-slate-200 flex gap-6 items-start">
+                    <div class="flex flex-col flex-grow">
+                        <span class="keyword-tag inline-block mb-2 self-start">機械式駐車場収容制限</span>
+                        <h3 class="font-bold text-xl mb-3 text-gouriki-navy">最新車種が入らない「壁」</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed mb-3">20年前の設計基準では、現在人気の高いSUVや大型ミニバンの重量・全高を想定できていません。高さ制限1,550mm程度に対し、近年主流の車高1,600mm超のSUVは収容不可能です。</p>
+                        <p class="text-gray-600 text-sm leading-relaxed italic border-l-2 border-slate-200 pl-3">「建物内に駐車場があるのに使えない」というミスマッチが、<strong>マンション駐車場空き問題</strong>の負の循環を生み出しています。</p>
+                    </div>
+                </div>
+                <div class="bg-white p-5 shadow-sm rounded-lg border-l-4 border-slate-200 flex gap-6 items-start">
+                    <div class="flex flex-col flex-grow">
+                        <span class="keyword-tag inline-block mb-2 self-start">機械式駐車場問題</span>
+                        <h3 class="font-bold text-xl mb-3 text-gouriki-navy">メーカー保守の終了と老朽化リスク</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed mb-3">設置から20年を過ぎると、制御基板やモーターなどの主要部品がメーカー供給終了（廃番）を迎えます。ひとたび重大な故障が起きれば修理不能となり、住民は突然「車が出せない」事態に直面します。</p>
+                        <p class="text-gray-600 text-sm leading-relaxed italic border-l-2 border-slate-200 pl-3">残された道は「全取替」か「放置」の二択。設備規模によって維持費は異なり、修繕費が資産価値を上回る事態にもなりかねません。いずれも<strong>修繕積立金不足</strong>に直結します。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 bg-gouriki-navy text-white rounded-2xl p-8 md:p-10 flex flex-col md:flex-row items-start gap-6">
+                <div class="flex-shrink-0 w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-white"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></svg>
+                </div>
+                <div>
+                    <p class="font-bold text-lg md:text-xl mb-2">「車離れ」×「車両大型化」×「老朽化」── 三重苦が同時進行している</p>
+                    <p class="text-gray-300 text-sm leading-relaxed">この3つの問題はいずれも単独でも深刻ですが、多くのマンションでは三つが重なって発生しています。問題が表面化してからでは遅く、今こそ<strong>長期修繕計画</strong>の全体像を見直す時期です。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 px-8 bg-white">
+        <div class="max-w-3xl mx-auto">
+            <a href="https://www.youtube.com/watch?v=47liU0HzUy4" target="_blank"
+               class="group block relative rounded-2xl overflow-hidden shadow-2xl border-4 border-red-600 hover:border-red-500 transition-all duration-300 hover:-translate-y-1">
+                <div class="relative px-8 md:px-14 py-12 md:py-16 flex flex-col md:flex-row items-center gap-8"
+                     style="background: linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0.4) 100%), url('https://img.youtube.com/vi/47liU0HzUy4/maxresdefault.jpg') center/cover no-repeat;">
+                    <div class="flex-shrink-0 w-24 h-24 md:w-28 md:h-28 bg-red-600 group-hover:bg-red-500 rounded-full flex items-center justify-center shadow-xl transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="w-12 h-12 ml-2"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                    <div class="text-center md:text-left flex-grow">
+                        <h4 class="text-white text-xl md:text-2xl font-black leading-snug mb-3">「機械式空き駐車場がマンションを蝕む<br class="hidden md:block">都市部で増加する"負の遺産"と制度の壁」</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-4">フジテレビの調査報道チームが独自取材。なぜ駐車場が「負の遺産」に変わるのか——空き問題・老朽化・制度の壁を、現場映像とデータで徹底解説した注目のドキュメントです。</p>
+                        <span class="inline-flex items-center gap-2 bg-red-600 group-hover:bg-red-500 text-white font-bold text-sm px-6 py-3 rounded-full transition-colors shadow-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M8 5v14l11-7z"/></svg>
+                            今すぐ視聴する（YouTube）
+                        </span>
+                    </div>
+                </div>
+                <div class="bg-slate-950 px-8 py-3 flex items-center justify-between flex-wrap gap-2">
+                    <p class="text-gray-500 text-xs flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-red-500 flex-shrink-0"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                        掲載元：フジテレビ 報道【公式】／スポットライト 調査報道プロジェクト
+                    </p>
+                    <p class="text-yellow-500 text-xs font-bold">※YouTubeページにてご確認ください</p>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <section id="cost" class="py-24 px-8 bg-slate-50">
+        <div class="max-w-5xl mx-auto">
+            <div class="mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-left text-gouriki-navy mb-4">
+                    <strong>マンション大規模修繕</strong>を目前に「お金が足りない」<br>その最大の原因は、駐車場かもしれません。
+                </h2>
+                <div class="bg-orange-50 border-l-4 border-orange-400 rounded-r-xl px-6 py-4">
+                    <p class="text-gray-700 text-sm md:text-base leading-relaxed">多くの<strong>マンション管理組合</strong>が直面する最大の壁、それが「長期修繕計画」の狂いです。特に<strong>マンション機械式駐車場</strong>を抱えるマンションでは、更新コストの読みの甘さが命取りとなります。</p>
+                </div>
+            </div>
+            <div class="grid lg:grid-cols-2 gap-10 items-stretch">
+                <div class="info-card p-10 flex flex-col bg-white">
+                    <h3 class="text-xl font-bold text-gouriki-navy mb-6 flex items-center"><i data-lucide="calculator" class="mr-3 text-gouriki-accent"></i>避けられない「コストの爆発」</h3>
+                    <div class="space-y-6 flex-grow">
+                        <p class="text-gray-600 text-sm leading-relaxed"><strong>機械式駐車場</strong>は設置から20〜25年で「更新（入れ替え）」の時期を迎えます。初期の修繕計画では数千万円程度と想定されていても、最新の建築資材高騰や人件費の上昇により、実際の見積もりは想定の1.5〜2倍に膨れ上がるケースが少なくありません。</p>
+                        <div class="bg-slate-50 p-6 rounded-xl border-l-4 border-gouriki-accent">
+                            <p class="font-bold text-gouriki-navy text-sm mb-2">1台あたり100万〜150万円の重圧</p>
+                            <p class="text-gray-500 text-xs leading-relaxed">例えば50台分の<strong>機械式駐車場</strong>を入れ替えるだけで、5,000万〜7,500万円という莫大な費用が発生します。これは<strong>マンション大規模修繕</strong>工事の予算を丸ごと飲み込んでしまうほどの金額です。</p>
+                        </div>
+                        <div class="bg-orange-50 p-5 rounded-xl border-l-4 border-orange-300">
+                            <p class="font-bold text-orange-700 text-sm mb-1">毎年かかる「見えないコスト」</p>
+                            <ul class="text-gray-500 text-xs leading-relaxed space-y-1">
+                                <li>・法定点検費用：年間60〜100万円（台数による）</li>
+                                <li>・稼働電気代：月数万円〜</li>
+                                <li>・消耗部品交換・修繕費：突発的に数十〜数百万円</li>
+                                <li>・専門業者の保守契約費：年間数十万円〜</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gouriki-navy text-white p-10 rounded-2xl shadow-xl flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-xl font-bold mb-8 flex items-center border-b border-white/10 pb-4"><i data-lucide="alert-circle" class="mr-3 text-orange-400"></i>管理組合が直面する３つの致命的リスク</h3>
+                        <div class="space-y-8 text-sm">
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 text-orange-400 font-bold border border-orange-400/30">01</div>
+                                <div><h4 class="font-bold mb-1">収支の赤字化と「管理費補填」の常態化</h4><p class="text-gray-300 leading-relaxed text-xs">稼働率の低下が賃料収入を激減させます。不足分を埋めるために管理費や修繕積立金からの「持ち出し」が発生し、マンション全体の財務基盤が急速に悪化します。</p></div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 text-orange-400 font-bold border border-orange-400/30">02</div>
+                                <div><h4 class="font-bold mb-1">「建物本来の寿命」を削る選択肢</h4><p class="text-gray-300 leading-relaxed text-xs">予算が足りないため、機械の更新を優先し、外壁塗装や配管更新といった「建物の寿命を延ばすために不可欠な修繕」を断念。<strong>マンション大規模修繕</strong>の先送りが続くと建物の劣化が加速します。</p></div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 text-orange-400 font-bold border border-orange-400/30">03</div>
+                                <div><h4 class="font-bold mb-1">住民への「一時徴収金」による不和</h4><p class="text-gray-300 leading-relaxed text-xs">積立金が底を突いた結果、数百万円単位の一時金の徴収や、修繕積立金の急激な値上げを余儀なくされます。<strong>修繕積立金不足</strong>が原因で住民同士の合意形成が困難になります。</p></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-8 pt-6 border-t border-white/10"><p class="text-xs text-gray-400 leading-relaxed">これらのリスクはいずれも「今日の問題」ではなく、「5年後・10年後に一気に顕在化する問題」です。だからこそ、早期の意思決定が重要です。</p></div>
+                </div>
+            </div>
+            <div class="mt-16 bg-white rounded-2xl p-8 md:p-12 border border-slate-200 shadow-sm">
+                <h3 class="text-xl font-bold text-gouriki-navy mb-8 text-center">「維持し続ける」vs「平面化する」── 20年間のコスト比較</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-red-50 border border-red-200 rounded-xl p-6">
+                        <h4 class="font-bold text-red-700 mb-4 flex items-center"><i data-lucide="x-circle" class="mr-2 w-5 h-5"></i>機械式を「維持」した場合</h4>
+                        <ul class="space-y-3 text-sm text-gray-700">
+                            <li class="flex justify-between border-b border-red-100 pb-2"><span>毎年の保守点検・電気代</span><span class="font-bold text-red-600">約100〜200万円/年</span></li>
+                            <li class="flex justify-between border-b border-red-100 pb-2"><span>突発的な部品交換・修繕</span><span class="font-bold text-red-600">都度数十〜数百万円</span></li>
+                            <li class="flex justify-between border-b border-red-100 pb-2"><span>15〜20年後の全体更新費</span><span class="font-bold text-red-600">5,000万〜1億円超</span></li>
+                            <li class="flex justify-between border-b border-red-100 pb-2"><span>空き区画による収入減</span><span class="font-bold text-red-600">年々拡大</span></li>
+                            <li class="flex justify-between"><span>20年間の総コスト（目安）</span><span class="font-bold text-red-700 text-base">1億円超の可能性</span></li>
+                        </ul>
+                    </div>
+                    <div class="bg-green-50 border border-green-200 rounded-xl p-6">
+                        <h4 class="font-bold text-green-700 mb-4 flex items-center"><i data-lucide="check-circle" class="mr-2 w-5 h-5"></i>「駐車場平面化」した場合</h4>
+                        <ul class="space-y-3 text-sm text-gray-700">
+                            <li class="flex justify-between border-b border-green-100 pb-2"><span>初期工事費（スマートデッキ）</span><span class="font-bold text-green-600">数百〜数千万円</span></li>
+                            <li class="flex justify-between border-b border-green-100 pb-2"><span>毎年の維持管理費</span><span class="font-bold text-green-600">メンテナンスフリー</span></li>
+                            <li class="flex justify-between border-b border-green-100 pb-2"><span>保守点検・電気代</span><span class="font-bold text-green-600">ほぼゼロ</span></li>
+                            <li class="flex justify-between border-b border-green-100 pb-2"><span>大型車対応で利用率向上</span><span class="font-bold text-green-600">収入安定化</span></li>
+                            <li class="flex justify-between"><span>浮いた予算の転用先</span><span class="font-bold text-green-700 text-base">建物修繕・EV充電・積立</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-400 mt-4 text-center">※上記は概算目安です。実際の費用はマンションの規模・設備状況により異なります。</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="solution" class="py-24 px-8 bg-gouriki-navy text-white overflow-hidden">
+        <div class="max-w-5xl mx-auto">
+            <div class="mb-16">
+                <h2 class="text-3xl md:text-5xl font-bold text-left mb-4">「維持」から「転換」へ。<br>空き駐車場を、新たな資産へ。</h2>
+                <div class="bg-white/10 border-l-4 border-orange-400 rounded-r-xl px-6 py-4">
+                    <p class="text-gray-200 text-base md:text-lg leading-relaxed">今の<strong>機械式駐車場</strong>を「維持し続ける」ことは、出口のないコスト増を意味します。将来の負担を断ち切り、土地のポテンシャルを最大限に引き出す「戦略的<strong>駐車場平面化</strong>」です。</p>
+                </div>
+            </div>
+            <div class="grid lg:grid-cols-2 gap-12 items-center mb-20">
+                <div class="ba-slider border-4 border-white/10">
+                    <div id="label-before" class="ba-label bg-black/80">BEFORE</div>
+                    <img src="https://gouriki.co.jp/wp-content/uploads/2025/09/%E3%82%B9%E3%83%9A%E3%83%BC%E3%82%B9%E3%82%A4%E3%83%B3%E9%B3%A5%E3%81%8C%E4%B8%98%E2%91%A0-scaled.jpg" alt="撤去前" class="ba-image active" id="img-before">
+                    <div id="label-after" class="ba-label bg-gouriki-accent" style="opacity:0">AFTER</div>
+                    <img src="https://gouriki.co.jp/wp-content/uploads/2025/09/%E3%82%B9%E3%83%9A%E3%83%BC%E3%82%B9%E3%82%A4%E3%83%B3%E9%B3%A5%E3%81%8C%E4%B8%98%E2%91%A1-1024x613.jpg" alt="平面化後" class="ba-image" id="img-after">
+                </div>
+                <div class="space-y-6">
+                    <h3 class="text-2xl font-bold text-orange-400 flex items-center"><i data-lucide="trending-down" class="mr-3"></i>駐車場平面化がもたらす「真のコスト改善」</h3>
+                    <p class="text-gray-300 leading-relaxed text-sm">保守点検費・電気代・突発的な部品交換費をすべてゼロにできます。さらに、ハイルーフ車・大型SUVが入庫できるようになるため、これまで外部の月極に流出していた住民が戻り、稼働率が劇的に改善します。機械式駐車場の維持にかかっていたコストを、建物本来の修繕や将来への投資に回すことができます。</p>
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div class="bg-white/10 p-5 rounded-lg border border-white/20"><h4 class="font-bold text-orange-300 mb-2">圧倒的コストカット</h4><p class="text-xs text-gray-200 leading-relaxed">点検費・電気代・高額な部品交換費を完全撤廃。数千万単位の更新費用をそのまま建物の修繕積立金に回せます。</p></div>
+                        <div class="bg-white/10 p-5 rounded-lg border border-white/20"><h4 class="font-bold text-orange-300 mb-2">利用率の劇的向上</h4><p class="text-xs text-gray-200 leading-relaxed">ハイルーフ車・大型SUVなど「今まで停めたくても停められなかった層」を呼び戻し、駐車場収入を安定させます。</p></div>
+                        <div class="bg-white/10 p-5 rounded-lg border border-white/20"><h4 class="font-bold text-orange-300 mb-2">安全性の確保</h4><p class="text-xs text-gray-200 leading-relaxed">動作待ち時間がゼロ。機械トラブルや挟まれ事故のリスクから完全に解放されます。</p></div>
+                        <div class="bg-white/10 p-5 rounded-lg border border-white/20"><h4 class="font-bold text-orange-300 mb-2">合意形成のしやすさ</h4><p class="text-xs text-gray-200 leading-relaxed">わかりやすいご提案書を提示。スムーズな総会決議をサポートします。</p></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="comparison" class="bg-white text-gray-800 rounded-3xl p-8 md:p-10 mb-16 shadow-xl">
+                <h3 class="text-xl font-bold text-gouriki-navy mb-3 text-left">平面化後のピット処理：2工法の比較</h3>
+                <p class="text-gray-500 text-sm mb-8 leading-relaxed">機械式駐車場を撤去した後、地下ピットの処理方法として「鋼製平面化（スマートデッキ）」と「埋め戻し」の2工法があります。</p>
+                <div class="overflow-x-auto rounded-xl border border-slate-200 mb-6">
+                    <table class="compare-table w-full border-collapse bg-white text-sm">
+                        <thead>
+                            <tr>
+                                <th class="text-left">比較項目</th>
+                                <th>鋼製平面化<br><span class="text-xs font-normal text-orange-200">（スマートデッキ）</span></th>
+                                <th>埋め戻し</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="text-left font-bold text-gray-700">初期工事費用</td><td class="td-smartdeck"><span class="badge-neutral">やや高め</span><span class="block text-xs text-gray-500 mt-1">鋼材費の影響あり</span></td><td class="td-umemodoshi"><span class="badge-merit">比較的安価</span><span class="block text-xs text-gray-500 mt-1">地盤良好な屋外の場合</span></td></tr>
+                            <tr><td class="text-left font-bold text-gray-700">工事期間</td><td class="td-smartdeck"><span class="badge-merit">短い</span></td><td class="td-umemodoshi"><span class="badge-neutral">やや長い</span><span class="block text-xs text-gray-500 mt-1">養生・乾燥期間が必要</span></td></tr>
+                            <tr><td class="text-left font-bold text-gray-700">軟弱地盤・屋内への対応</td><td class="td-smartdeck"><span class="badge-merit">対応可</span></td><td class="td-umemodoshi"><span class="badge-demerit">原則困難</span></td></tr>
+                            <tr><td class="text-left font-bold text-gray-700">地盤沈下・陥没リスク</td><td class="td-smartdeck"><span class="badge-merit">なし</span></td><td class="td-umemodoshi"><span class="badge-demerit">あり</span></td></tr>
+                            <tr><td class="text-left font-bold text-gray-700">排水計画への影響</td><td class="td-smartdeck"><span class="badge-merit">排水パイプ残置</span></td><td class="td-umemodoshi"><span class="badge-demerit">要見直し</span></td></tr>
+                            <tr><td class="text-left font-bold text-gray-700">将来の転用・復元</td><td class="td-smartdeck"><span class="badge-merit">容易</span></td><td class="td-umemodoshi"><span class="badge-demerit">困難</span></td></tr>
+                            <tr><td class="text-left font-bold text-gray-700">長期維持管理</td><td class="td-smartdeck"><span class="badge-merit">メンテナンスフリー</span></td><td class="td-umemodoshi"><span class="badge-neutral">なし</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-xs text-gray-400 text-center">※どちらの工法が適切かは、地盤条件・ピット形状・将来計画などによって異なります。</p>
+            </div>
+
+            <div class="bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12 mb-16">
+                <h3 class="text-2xl font-bold text-white text-left mb-10"><i data-lucide="git-branch" class="inline-block mr-2 text-orange-400"></i>駐車場平面化工事の流れ</h3>
+                <div class="flex flex-col gap-4">
+                    <div class="flex items-start gap-4">
+                        <div class="flex flex-col items-center flex-shrink-0">
+                            <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold text-sm">01</div>
+                            <div class="w-px h-8 bg-orange-400/40 mt-1"></div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E67E22" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+                        </div>
+                        <div class="bg-white/5 border border-white/10 rounded-xl px-5 py-4 flex-grow">
+                            <h4 class="font-bold text-white text-sm mb-1">現地調査・診断</h4>
+                            <p class="text-gray-400 text-xs leading-relaxed">設備状況・ピット形状・附置義務台数などを無料調査します。</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="flex flex-col items-center flex-shrink-0">
+                            <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold text-sm">02</div>
+                            <div class="w-px h-8 bg-orange-400/40 mt-1"></div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E67E22" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+                        </div>
+                        <div class="bg-white/5 border border-white/10 rounded-xl px-5 py-4 flex-grow">
+                            <h4 class="font-bold text-white text-sm mb-1">概算見積り</h4>
+                            <p class="text-gray-400 text-xs leading-relaxed">ご提供情報をもとに概算見積りを提示させていただきます。</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="flex flex-col items-center flex-shrink-0">
+                            <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold text-sm">03</div>
+                            <div class="w-px h-8 bg-orange-400/40 mt-1"></div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E67E22" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+                        </div>
+                        <div class="bg-white/5 border border-white/10 rounded-xl px-5 py-4 flex-grow">
+                            <h4 class="font-bold text-white text-sm mb-1">ご契約</h4>
+                            <p class="text-gray-400 text-xs leading-relaxed">ご提案内容にご納得いただけましたら正式にご契約となります。その後、必要に応じて工事に向けた詳細設計や部材の製作を進めます。</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold text-sm">04</div>
+                        </div>
+                        <div class="bg-white/5 border border-orange-400/40 rounded-xl px-5 py-4 flex-grow">
+                            <h4 class="font-bold text-orange-300 text-sm mb-1">撤去・スマートデッキ設置</h4>
+                            <p class="text-gray-400 text-xs leading-relaxed">安全・迅速な<strong>立体駐車場解体</strong>と鋼製平面駐車場への転換工事。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12 mb-16">
+                <div class="max-w-4xl mx-auto">
+                    <h3 class="text-2xl md:text-3xl font-bold text-white mb-2 text-left"><i data-lucide="zap" class="inline-block mr-3 text-orange-400"></i>スマートデッキによる空間創出</h3>
+                    <div class="flex flex-col sm:flex-row gap-3 mb-6">
+                        <div class="flex items-center gap-3 border-l-4 border-orange-400 bg-white/15 rounded-r-xl px-4 py-3">
+                            <div>
+                                <p class="text-orange-300 text-xs font-black tracking-widest">特許取得製品</p>
+                                <p class="text-white text-xs mt-0.5">特許 第7681455号｜スマートデッキ</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 border-l-4 border-orange-400 bg-white/15 rounded-r-xl px-4 py-3">
+                            <div>
+                                <p class="text-orange-300 text-xs font-black tracking-widest">特許取得製品</p>
+                                <p class="text-white text-xs mt-0.5">特許 第7223962号｜スマートボックス</p>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 text-sm md:text-base leading-relaxed mb-10">SMART DECKは、コスト削減・安全性・活用の自由度を兼ね備えた平面化ソリューション。<br>高耐久部材と自社製造で、安心の品質と長期運用を実現します。</p>
+                    <div class="grid md:grid-cols-3 gap-6 mb-12">
+                        <div class="bg-white/10 p-6 rounded-2xl border border-white/10"><div class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mb-4"><i data-lucide="battery-charging" class="text-white"></i></div><h4 class="font-bold text-white mb-2">EV充電設備の設置</h4><p class="text-xs text-gray-300 leading-relaxed">電気自動車の普及に対応した充電インフラを整備。「EV充電できるマンション」は入居者満足度と資産価値を底上げします。</p></div>
+                        <div class="bg-white/10 p-6 rounded-2xl border border-white/10"><div class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mb-4"><i data-lucide="package" class="text-white"></i></div><h4 class="font-bold text-white mb-2">スマートBOX設置可能</h4><p class="text-xs text-gray-300 leading-relaxed">スペアタイヤやアウトドア用品の収納はもちろん、防災備蓄倉庫としても活用できます。</p></div>
+                        <div class="bg-white/10 p-6 rounded-2xl border border-white/10"><div class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mb-4"><i data-lucide="sun" class="text-white"></i></div><h4 class="font-bold text-white mb-2">環境・景観の改善</h4><p class="text-xs text-gray-300 leading-relaxed">巨大な鉄の塊が消え、光と風が通る開放的な空間へ生まれ変わります。エントランス周辺の景観が向上します。</p></div>
+                    </div>
+                    <div class="text-left">
+                        <a href="https://gouriki.co.jp/smart-deck/" target="_blank" class="inline-flex items-center bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-10 rounded-full transition-all group shadow-xl">
+                            <span>スマートデッキの詳細はこちら</span>
+                            <i data-lucide="arrow-right" class="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-8 bg-white">
+        <div class="max-w-5xl mx-auto">
+            <div class="mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-left text-gouriki-navy mb-4">駐車場問題を解決した先にある、<br>安心で価値のあるマンションライフ</h2>
+                <div class="bg-orange-50 border-l-4 border-orange-400 rounded-r-xl px-6 py-4">
+                    <p class="text-gray-700 text-sm md:text-base leading-relaxed"><strong>機械式駐車場</strong>の撤去・<strong>駐車場平面化</strong>は、単なる「設備の削除」ではありません。20年先を見据えた<strong>マンション大規模修繕</strong>計画のリセットであり、居住者のQOLを高めるための前向きな投資です。</p>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+                <div class="p-8 border border-slate-100 rounded-2xl bg-slate-50 hover:shadow-md transition-shadow"><div class="text-gouriki-accent mb-4"><i data-lucide="trending-up" class="w-10 h-10"></i></div><h4 class="font-bold text-lg mb-3 text-gouriki-navy">管理費・修繕金の健全化</h4><p class="text-sm text-gray-600 leading-relaxed">莫大な更新費用と毎月の点検費を削減。浮いた資金を建物本来の修繕に回せるようになります。</p></div>
+                <div class="p-8 border border-slate-100 rounded-2xl bg-slate-50 hover:shadow-md transition-shadow"><div class="text-gouriki-accent mb-4"><i data-lucide="leaf" class="w-10 h-10"></i></div><h4 class="font-bold text-lg mb-3 text-gouriki-navy">次世代インフラの基盤</h4><p class="text-sm text-gray-600 leading-relaxed">EV充電器の設置やカーシェアリングの導入も可能になり、「選ばれるマンション」へのアップデートが実現します。</p></div>
+                <div class="p-8 border border-slate-100 rounded-2xl bg-slate-50 hover:shadow-md transition-shadow"><div class="text-gouriki-accent mb-4"><i data-lucide="shield-check" class="w-10 h-10"></i></div><h4 class="font-bold text-lg mb-3 text-gouriki-navy">安全・安心の確保</h4><p class="text-sm text-gray-600 leading-relaxed">動作待ち時間がゼロに。事故リスクや災害時の「車が取り出せない」不安からも解放されます。</p></div>
+            </div>
+            <div class="max-w-4xl mx-auto bg-white border border-slate-200 rounded-2xl p-8 mb-16 shadow-sm">
+                <div class="flex items-start gap-4">
+                    <i data-lucide="book-open" class="text-gouriki-accent w-8 h-8 flex-shrink-0 mt-1"></i>
+                    <div>
+                        <h4 class="font-bold text-xl text-gouriki-navy mb-2">さらに詳しく知りたい管理組合様へ</h4>
+                        <p class="text-sm text-gray-600 mb-4">GOURIKIの公式サイトでは、全国の<strong>マンション管理組合</strong>様が直面したリアルな悩みとその解決プロセスをコラム形式で発信しています。</p>
+                        <a href="https://gouriki.co.jp/column/" target="_blank" class="text-gouriki-accent font-bold hover:underline flex items-center">GOURIKIお役立ちコラムを見る <i data-lucide="external-link" class="ml-1 w-4 h-4"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="faq" class="bg-slate-50 text-gouriki-navy p-6 md:p-10 rounded-xl mb-16 border border-slate-200">
+                <div class="text-center mb-10">
+                    <span class="text-sm font-bold text-gouriki-accent tracking-widest block mb-2">FAQ</span>
+                    <h3 class="text-2xl md:text-3xl font-bold text-gouriki-navy"><strong>マンション管理組合</strong>様からのよくある質問</h3>
+                </div>
+                <div class="max-w-3xl mx-auto text-left">
+                    <div class="faq-card" onclick="toggleFaq(this)">
+                        <div class="faq-question"><p class="font-bold pr-4 text-sm md:text-base">Q1. <strong>マンション駐車場空き問題</strong>の解決策として、外部への賃貸は有効ですか？</p><i data-lucide="chevron-down" class="faq-icon text-gouriki-accent flex-shrink-0"></i></div>
+                        <div class="faq-answer"><div class="space-y-3 text-sm text-gray-600 pt-2"><p>外部への賃貸（外部貸し）は、短期的に収入を増やす手段として検討される場合があります。しかし、いくつかの重大なリスクがあります。</p><p><strong>税務上のリスク：</strong>マンション管理組合は通常、収益事業に対して法人税が課税されます。外部への賃貸が「収益事業」と認定されると、確定申告の義務が生じ、手続きが煩雑になります。</p><p><strong>セキュリティリスク：</strong>居住者以外の外部者がマンションの敷地内に日常的に出入りすることになり、防犯・セキュリティ水準の低下につながります。</p><p><strong>根本解決にならない：</strong>外部貸しはあくまで応急処置に過ぎず、老朽化コスト・更新費用・<strong>修繕積立金不足</strong>といった本質的な問題は何も解決しません。</p></div></div>
+                    </div>
+                    <div class="faq-card" onclick="toggleFaq(this)">
+                        <div class="faq-question"><p class="font-bold pr-4 text-sm md:text-base">Q2. <strong>立体駐車場解体</strong>・撤去の決議は「特別決議」が必要ですか？</p><i data-lucide="chevron-down" class="faq-icon text-gouriki-accent flex-shrink-0"></i></div>
+                        <div class="faq-answer"><div class="space-y-3 text-sm text-gray-600 pt-2"><p>一般的に、<strong>立体駐車場解体</strong>・<strong>機械式駐車場</strong>の撤去は「共用部分の変更」に該当するため、区分所有法に基づく特別決議（区分所有者および議決権の各4分の3以上の賛成）が必要となるケースが多いです。</p><p>ただし、マンションの規約内容や工事の範囲によっては普通決議で足りる場合もあり、まずは管理規約の確認と、管理組合の顧問弁護士・マンション管理士への相談が必要です。</p><p><strong>附置義務の確認も重要：</strong>条例による<strong>駐車場附置義務</strong>が設定されているマンションでは、削減できる台数に制限があります。</p></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="contact" class="bg-gouriki-navy p-10 md:p-16 rounded-2xl text-white shadow-2xl relative overflow-hidden">
+                <div class="absolute inset-0 opacity-5" style="background-image: repeating-linear-gradient(45deg, #fff 0, #fff 1px, transparent 0, transparent 50%); background-size: 20px 20px;"></div>
+                <div class="relative z-10 text-center">
+                    <p class="text-xl md:text-2xl font-bold mb-4">まずは、あなたのマンションの「削減可能コスト」を知ることから始めませんか？</p>
+                    <p class="text-gray-300 text-sm mb-10 max-w-2xl mx-auto">現状診断から長期修繕計画の見直し提案まで、一貫してサポートします。</p>
+                    <div class="flex flex-col md:flex-row justify-center gap-4">
+                        <a href="https://gouriki.co.jp/handbook/" target="_blank" class="bg-gouriki-accent hover:bg-orange-600 text-white font-bold py-5 px-12 rounded-lg shadow-lg transition-all text-xl">資料をダウンロード</a>
+                        <a href="https://gouriki.co.jp/" target="_blank" class="bg-white text-gouriki-navy hover:bg-gray-100 font-bold py-5 px-12 rounded-lg shadow-lg transition-all text-xl">公式ホームページはこちら</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer style="background:#002B5B; color:rgba(255,255,255,.65); padding:4rem 1.5rem;">
+        <div style="max-width:1100px; margin:0 auto;">
+            <div style="display:grid; grid-template-columns:repeat(3,minmax(180px,1fr)); gap:3rem; border-bottom:1px solid rgba(255,255,255,.12); padding-bottom:3rem; margin-bottom:3rem;">
+                <div>
+                    <img src="https://gouriki.co.jp/wp-content/themes/gouriki-hp/images/logo-white.png" alt="GOURIKI" style="height:40px; width:auto; margin-bottom:1.5rem;" onerror="this.src='https://gouriki.co.jp/wp-content/themes/gouriki-hp/images/logo.png'">
+                    <h4 style="font-family:'Noto Sans JP',sans-serif; font-weight:700; font-size:.95rem; margin-bottom:1rem; color:#fff;">株式会社GOURIKIコーポレーション</h4>
+                    <div style="display:flex; flex-direction:column; gap:1rem; font-size:.72rem; color:rgba(255,255,255,.55);">
+                        <div><p style="font-weight:700; color:#fff;">本社所在地</p><p>〒134-0085 東京都江戸川区南葛西6-13-14</p><p>TEL: 03-3877-0993（総合窓口）</p><p>TEL: 03-6663-8777（駐車場解体）</p></div>
+                        <div><p style="font-weight:700; color:#fff;">千葉工場</p><p>〒275-0001 千葉県習志野市東習志野7-1-1</p></div>
+                        <div><p><span style="font-weight:700; color:#fff;">代表取締役:</span> 山﨑 剛</p></div>
+                    </div>
+                </div>
+                <div>
+                    <p style="font-weight:700; margin-bottom:1.5rem; border-left:4px solid #E67E22; padding-left:.5rem; color:#fff;">Links</p>
+                    <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:.75rem; font-size:.875rem;">
+                        <li><a href="https://gouriki.co.jp/about/"      style="color:rgba(255,255,255,.55); text-decoration:none; display:flex; align-items:center; gap:.25rem;" onmouseover="this.style.color='#E67E22'" onmouseout="this.style.color='rgba(255,255,255,.55)'"><i data-lucide="chevron-right" style="width:16px;height:16px;"></i>会社案内</a></li>
+                        <li><a href="https://gouriki.co.jp/smart-deck/" style="color:rgba(255,255,255,.55); text-decoration:none; display:flex; align-items:center; gap:.25rem;" onmouseover="this.style.color='#E67E22'" onmouseout="this.style.color='rgba(255,255,255,.55)'"><i data-lucide="chevron-right" style="width:16px;height:16px;"></i>SMART DECK</a></li>
+                        <li><a href="https://gouriki.co.jp/ai-parking/" style="color:rgba(255,255,255,.55); text-decoration:none; display:flex; align-items:center; gap:.25rem;" onmouseover="this.style.color='#E67E22'" onmouseout="this.style.color='rgba(255,255,255,.55)'"><i data-lucide="chevron-right" style="width:16px;height:16px;"></i>AI PARKING</a></li>
+                        <li><a href="https://gouriki.co.jp/case/"       style="color:rgba(255,255,255,.55); text-decoration:none; display:flex; align-items:center; gap:.25rem;" onmouseover="this.style.color='#E67E22'" onmouseout="this.style.color='rgba(255,255,255,.55)'"><i data-lucide="chevron-right" style="width:16px;height:16px;"></i>施工事例</a></li>
+                        <li><a href="https://gouriki.co.jp/column/"     style="color:rgba(255,255,255,.55); text-decoration:none; display:flex; align-items:center; gap:.25rem;" onmouseover="this.style.color='#E67E22'" onmouseout="this.style.color='rgba(255,255,255,.55)'"><i data-lucide="chevron-right" style="width:16px;height:16px;"></i>コラム</a></li>
+                        <li><a href="https://gouriki.co.jp/news/"       style="color:rgba(255,255,255,.55); text-decoration:none; display:flex; align-items:center; gap:.25rem;" onmouseover="this.style.color='#E67E22'" onmouseout="this.style.color='rgba(255,255,255,.55)'"><i data-lucide="chevron-right" style="width:16px;height:16px;"></i>お知らせ</a></li>
+                    </ul>
+                </div>
+
+            </div>
+            <div style="display:flex; justify-content:center; gap:1rem; margin-bottom:1.5rem;">
+                <a href="https://www.youtube.com/@gouriki" target="_blank" style="display:flex; align-items:center; gap:.5rem; background:#dc2626; color:#fff; font-weight:700; font-size:.875rem; padding:.6rem 1.25rem; border-radius:9999px; text-decoration:none;">
+                    <svg style="width:20px;height:20px;flex-shrink:0;" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    YouTube Official
+                </a>
+                <a href="https://www.instagram.com/gourikicorporation/" target="_blank" style="display:flex; align-items:center; gap:.5rem; color:#fff; font-weight:700; font-size:.875rem; padding:.6rem 1.25rem; border-radius:9999px; text-decoration:none; background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);">
+                    <svg style="width:20px;height:20px;flex-shrink:0;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+                    Instagram Official
+                </a>
+            </div>
+            <p style="text-align:center; font-size:.625rem; color:rgba(255,255,255,.4);">&copy; 2026 株式会社GOURIKIコーポレーション All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', function(e) {
+                const target = document.querySelector(this.getAttribute('href'));
+                if (!target) return;
+                e.preventDefault();
+                window.scrollTo({ top: target.getBoundingClientRect().top + window.pageYOffset - 20, behavior: 'smooth' });
+            });
+        });
+
+        function toggleFaq(el) {
+            document.querySelectorAll('.faq-card').forEach(f => { if (f !== el) f.classList.remove('active'); });
+            el.classList.toggle('active');
+        }
+
+        const imgBefore = document.getElementById('img-before');
+        const imgAfter  = document.getElementById('img-after');
+        const lblBefore = document.getElementById('label-before');
+        const lblAfter  = document.getElementById('label-after');
+        let showAfter = false;
+        setInterval(() => {
+            if (!showAfter) {
+                imgBefore.classList.remove('active'); imgAfter.classList.add('active');
+                lblBefore.style.opacity = '0'; lblAfter.style.opacity = '1';
+            } else {
+                imgAfter.classList.remove('active'); imgBefore.classList.add('active');
+                lblAfter.style.opacity = '0'; lblBefore.style.opacity = '1';
+            }
+            showAfter = !showAfter;
+        }, 4000);
+    </script>
+</body>
+</html>

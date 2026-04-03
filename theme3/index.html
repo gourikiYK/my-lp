@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>マンション駐車場空き問題ガイド | GOURIKI Corporation</title>
+<script src="https://unpkg.com/lucide@latest"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;700&family=Inter:wght@500;600;700&display=swap&font-display=swap" rel="stylesheet">
+<style>
+/* ===== DESIGN TOKENS ===== */
+:root {
+  --blue:     #2C5F8A;
+  --blue-m:   #3D7AB0;
+  --blue-l:   #EBF3FA;
+  --blue-xl:  #F5F9FD;
+  --ink:      #1E293B;
+  --ink-2:    #334155;
+  --slate:    #475569;
+  --slate-l:  #94A3B8;
+  --bg:       #F8FAFC;
+  --white:    #FFFFFF;
+  --rule:     #E2E8F0;
+  --ok:       #16803C;
+  --ok-l:     #DCFCE7;
+  --warn:     #B45309;
+  --warn-l:   #FEF3C7;
+  --ng:       #C73030;
+  --ng-l:     #FEF2F2;
+}
+
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html  { scroll-behavior: smooth; }
+body  { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--ink); line-height: 1.85; font-size: 15px; }
+
+/* ===== LAYOUT ===== */
+.w   { max-width: 980px; margin: 0 auto; }
+.w-n { max-width: 760px; margin: 0 auto; }
+.pad { padding: 0 1.5rem; }
+.sec       { padding: 4.5rem 1.5rem; }
+.sec-white { background: var(--white); }
+.sec-gray  { background: var(--bg); }
+.sec-blue  { background: var(--blue-xl); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.sec-dark  { background: var(--ink); }
+
+/* ===== SECTION LABELS ===== */
+.sl { font-size: .6rem; font-weight: 700; letter-spacing: .18em; color: var(--blue); text-transform: uppercase; margin-bottom: .6rem; display: flex; align-items: center; gap: .45rem; }
+.sl::before { content: ''; display: block; width: 14px; height: 2px; background: currentColor; border-radius: 1px; }
+.sl.lt { color: #93C5FD; }
+.sh    { font-family: 'Noto Serif JP', serif; font-size: clamp(1.4rem, 2.8vw, 2rem); font-weight: 700; color: var(--ink); line-height: 1.4; margin-bottom: .75rem; }
+.sh em { font-style: normal; color: var(--blue); }
+.sh.lt { color: var(--white); }
+.sh.lt em { color: #93C5FD; }
+.sp    { font-size: .88rem; color: var(--slate); line-height: 2; max-width: 640px; margin-bottom: 2.5rem; }
+.sp.lt { color: rgba(255,255,255,.55); }
+
+/* ===== BUTTONS ===== */
+.btn-white { display: inline-flex; align-items: center; gap: .5rem; background: var(--white); color: var(--blue); font-family: 'Noto Sans JP', sans-serif; font-size: .88rem; font-weight: 700; padding: .9rem 2.2rem; border-radius: 4px; text-decoration: none; transition: background .2s; }
+.btn-white:hover { background: var(--blue-l); }
+
+/* ===== HEADER ===== */
+.hd { background: var(--white); border-bottom: 1px solid var(--rule); }
+.hd-inner { max-width: 1100px; margin: 0 auto; padding: .9rem 1.5rem; }
+.hd-brand { display: flex; align-items: center; gap: .75rem; }
+.hd-icon  { width: 36px; height: 36px; background: var(--blue); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.hd-name  { font-family: 'Inter', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--ink); }
+.hd-name span { color: var(--blue-m); }
+
+/* ===== HERO ===== */
+.hero { background: var(--white); border-bottom: 1px solid var(--rule); padding: 4rem 1.5rem 3.5rem; }
+.hero-inner { max-width: 980px; margin: 0 auto; display: grid; grid-template-columns: 1fr 320px; gap: 4rem; align-items: center; }
+@media (max-width: 700px) { .hero-inner { grid-template-columns: 1fr; gap: 2.5rem; } }
+.hero-label { display: inline-block; background: var(--blue-l); color: var(--blue); font-size: .65rem; font-weight: 700; letter-spacing: .1em; padding: .3rem .8rem; border-radius: 3px; text-transform: uppercase; margin-bottom: 1.25rem; }
+.hero-h    { font-family: 'Noto Serif JP', serif; font-size: clamp(1.7rem, 3.5vw, 2.5rem); font-weight: 700; color: var(--ink); line-height: 1.45; margin-bottom: 1rem; }
+.hero-h em { font-style: normal; color: var(--blue); }
+.hero-p    { font-size: .9rem; color: var(--slate); line-height: 2; max-width: 500px; }
+/* hero data panel */
+.hero-panel { display: flex; flex-direction: column; gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; }
+.hp-2col   { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule); }
+.hp-cell   { background: var(--white); padding: 1.25rem; text-align: center; }
+.hp-cell.span2 { background: var(--blue-xl); }
+.hp-n  { font-family: 'Inter', sans-serif; font-size: 2rem; font-weight: 700; color: var(--blue); line-height: 1; }
+.hp-n span { font-size: 1rem; }
+.hp-d  { font-size: .68rem; color: var(--slate-l); margin-top: .2rem; line-height: 1.5; }
+
+/* ===== 3-COL CARD GRID ===== */
+.card3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; margin: 2rem 0; }
+@media (max-width: 620px) { .card3 { grid-template-columns: 1fr; } }
+.c3-card { background: var(--white); padding: 1.75rem 1.5rem; }
+.c3-num  { font-size: .65rem; font-weight: 700; letter-spacing: .12em; color: var(--blue-m); margin-bottom: .65rem; }
+.c3-icon { width: 40px; height: 40px; background: var(--blue-l); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: .85rem; }
+.c3-h    { font-weight: 700; font-size: .95rem; color: var(--ink); margin-bottom: .5rem; line-height: 1.45; }
+.c3-p    { font-size: .78rem; color: var(--slate); line-height: 1.95; }
+.c3-note { margin-top: .85rem; padding: .55rem .75rem; background: var(--blue-l); border-radius: 4px; font-size: .72rem; color: var(--blue); font-weight: 600; }
+
+/* ===== MECHANISM (numbered flow) ===== */
+.mech { display: flex; flex-direction: column; gap: 0; margin: 2rem 0; position: relative; }
+.mech::before { content: ''; position: absolute; left: 19px; top: 20px; bottom: 20px; width: 2px; background: var(--rule); }
+.mech-item { display: grid; grid-template-columns: 40px 1fr; gap: 1rem; margin-bottom: 1.1rem; position: relative; }
+.mech-dot  { width: 40px; height: 40px; background: var(--blue-l); border: 2px solid var(--blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Inter', sans-serif; font-size: .75rem; font-weight: 700; color: var(--blue); position: relative; z-index: 1; flex-shrink: 0; }
+.mech-dot.last { background: var(--blue); color: var(--white); border-color: var(--blue); }
+.mech-body { background: var(--white); border: 1px solid var(--rule); border-radius: 8px; padding: 1.1rem 1.25rem; }
+.mech-body.last { border-color: var(--blue-m); background: var(--blue-xl); }
+.mech-h    { font-weight: 700; font-size: .9rem; color: var(--ink); margin-bottom: .25rem; }
+.mech-h.last { color: var(--blue); }
+.mech-p    { font-size: .78rem; color: var(--slate); line-height: 1.85; }
+
+/* ===== SCENARIO ===== */
+.scenario     { background: var(--white); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; margin: 2rem 0; }
+.scenario-hd  { background: var(--ink); color: var(--white); padding: 1rem 1.5rem; font-size: .82rem; font-weight: 700; }
+.scenario-body { padding: 1.5rem; }
+.sc-steps { display: flex; flex-direction: column; gap: .75rem; }
+.sc-step  { display: flex; gap: .85rem; align-items: flex-start; }
+.sc-dot   { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .62rem; font-weight: 700; color: var(--white); margin-top: .1rem; }
+.sc-dot.ok   { background: var(--ok); }
+.sc-dot.warn { background: var(--warn); }
+.sc-dot.ng   { background: var(--ng); }
+.sc-text  { font-size: .8rem; color: var(--slate); line-height: 1.85; }
+.sc-label { font-weight: 700; color: var(--ink); margin-right: .5rem; }
+
+/* ===== CASE STUDIES ===== */
+.cases { display: flex; flex-direction: column; gap: 1.5rem; margin: 2rem 0; }
+.case-card { background: var(--white); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
+.case-hd   { display: grid; grid-template-columns: 60px 1fr; }
+.case-num  { background: var(--blue); color: var(--white); font-family: 'Inter', sans-serif; font-size: 1.4rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.case-info { padding: 1.1rem 1.5rem; background: var(--blue-xl); }
+.case-tag  { display: inline-block; background: var(--blue-l); color: var(--blue); font-size: .62rem; font-weight: 700; border-radius: 3px; padding: .1rem .45rem; margin-bottom: .35rem; }
+.case-ttl  { font-weight: 700; font-size: .92rem; color: var(--ink); line-height: 1.4; }
+.case-body { padding: 1.35rem 1.5rem; }
+.case-body p { font-size: .8rem; color: var(--slate); line-height: 1.95; margin-bottom: .75rem; }
+.case-body p:last-child { margin-bottom: 0; }
+.case-lesson { background: var(--blue-xl); border-left: 3px solid var(--blue); border-radius: 0 5px 5px 0; padding: .75rem 1rem; font-size: .75rem; color: var(--blue); font-weight: 600; margin-top: .75rem; }
+.case-lesson span { display: block; font-size: .65rem; font-weight: 400; color: var(--slate); margin-top: .15rem; }
+
+/* ===== AFTER-USE CARDS ===== */
+.use-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; margin: 2rem 0; }
+.use-card { background: var(--white); border: 1px solid var(--rule); border-radius: 10px; padding: 1.5rem; }
+.use-icon { width: 44px; height: 44px; background: var(--blue-l); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: .9rem; }
+.use-h    { font-weight: 700; font-size: .92rem; color: var(--ink); margin-bottom: .4rem; }
+.use-p    { font-size: .77rem; color: var(--slate); line-height: 1.9; }
+.use-tag  { display: inline-block; background: var(--ok-l); color: var(--ok); font-size: .62rem; font-weight: 700; border-radius: 3px; padding: .1rem .4rem; margin-top: .65rem; }
+
+/* ===== INFO BOX ===== */
+.info-box         { background: var(--warn-l); border-left: 4px solid var(--warn); border-radius: 0 6px 6px 0; padding: 1.1rem 1.35rem; margin: 1.5rem 0; }
+.info-box strong  { font-size: .72rem; color: var(--warn); display: block; margin-bottom: .25rem; }
+.info-box p       { font-size: .79rem; color: #451a03; line-height: 1.9; }
+
+/* ===== FAQ ===== */
+.faq-list { display: flex; flex-direction: column; gap: .6rem; margin: 2rem 0; }
+.faq-item { background: var(--white); border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; }
+.faq-item.open { border-color: var(--blue-m); }
+.faq-q    { padding: 1.1rem 1.25rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; gap: .75rem; }
+.faq-q-txt { font-weight: 700; font-size: .85rem; color: var(--ink); }
+.faq-ico  { flex-shrink: 0; transition: transform .3s; color: var(--blue); }
+.faq-item.open .faq-ico { transform: rotate(180deg); }
+.faq-ans  { max-height: 0; overflow: hidden; transition: max-height .35s ease, padding .3s; }
+.faq-item.open .faq-ans { max-height: 500px; padding: 0 1.25rem 1.25rem; }
+.faq-ans p { font-size: .8rem; color: var(--slate); line-height: 1.95; }
+
+/* ===== ARTICLES ===== */
+.arts { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: .85rem; margin: 2rem 0; }
+.art  { text-decoration: none; color: inherit; background: var(--white); border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; display: block; transition: box-shadow .2s, transform .2s; }
+.art:hover { box-shadow: 0 4px 18px rgba(0,0,0,.08); transform: translateY(-2px); }
+.art-accent { height: 3px; background: var(--blue); }
+.art-body   { padding: .9rem; }
+.art-cat    { display: inline-block; background: var(--blue-l); color: var(--blue); font-size: .6rem; font-weight: 700; border-radius: 3px; padding: .1rem .45rem; margin-bottom: .4rem; }
+.art-t      { font-size: .79rem; font-weight: 700; color: var(--ink); line-height: 1.5; }
+.art-d      { font-size: .62rem; color: var(--slate-l); margin-top: .35rem; }
+
+/* ===== CTA ===== */
+.cta { position: relative; overflow: hidden; background: var(--blue); padding: 4rem 1.5rem; }
+.cta-bg  { position: absolute; inset: 0; background-image: url('https://gouriki.co.jp/wp-content/themes/gouriki-hp/handbook/images/main_img.png'); background-size: cover; background-position: center; opacity: .07; }
+.cta-in  { max-width: 700px; margin: 0 auto; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1.25rem; position: relative; }
+.cta-lbl { font-size: .7rem; font-weight: 700; letter-spacing: .2em; color: rgba(255,255,255,.6); }
+.cta-h   { font-family: 'Noto Serif JP', serif; font-size: 1.4rem; font-weight: 700; color: var(--white); line-height: 1.7; }
+.cta-p   { font-size: .78rem; color: rgba(255,255,255,.55); line-height: 1.9; }
+
+/* ===== FOOTER ===== */
+footer { background: #1E293B; color: rgba(255,255,255,.5); padding: 3.5rem 1.5rem; }
+.ft-w  { max-width: 1100px; margin: 0 auto; }
+.ft-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 2rem; border-bottom: 1px solid rgba(255,255,255,.07); padding-bottom: 2.5rem; margin-bottom: 2rem; }
+.ft-h  { font-weight: 700; font-size: .85rem; color: var(--white); margin-bottom: .65rem; border-left: 3px solid var(--blue-m); padding-left: .5rem; }
+.ft-p  { font-size: .7rem; line-height: 1.9; }
+.ft-links ul { list-style: none; }
+.ft-links li { margin-bottom: .4rem; }
+.ft-links a  { font-size: .76rem; color: rgba(255,255,255,.45); text-decoration: none; transition: color .2s; }
+.ft-links a:hover { color: var(--white); }
+.ft-sns  { display: flex; justify-content: center; gap: .6rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.ft-copy { text-align: center; font-size: .6rem; color: rgba(255,255,255,.25); }
+
+/* ===== MOBILE FIXES ===== */
+/* ① 施工事例の番号 */
+@media (max-width: 500px) {
+  .case-hd { grid-template-columns: 48px 1fr; }
+  .case-num { font-size: 1rem; }
+  .case-info { padding: .85rem 1rem; }
+  .case-ttl { font-size: .82rem; }
+  .case-body { padding: 1rem; }
+}
+/* ② ヒーローデータパネル */
+@media (max-width: 400px) {
+  .hp-2col { grid-template-columns: 1fr; }
+  .hp-n { font-size: 1.6rem; }
+}
+/* ③ フッター */
+@media (max-width: 360px) {
+  .ft-grid { grid-template-columns: 1fr; }
+}
+/* ④ その他スマホ全般 */
+@media (max-width: 480px) {
+  .sec { padding: 3rem 1.25rem; }
+  .hero { padding: 2.5rem 1.25rem; }
+  .use-grid { grid-template-columns: 1fr; }
+  .cta-h { font-size: 1.15rem; }
+  .faq-q-txt { font-size: .8rem; }
+  .ft-sns { flex-direction: column; align-items: center; }
+}
+
+/* ===== REVEAL ANIMATION ===== */
+.rv  { opacity: 0; transform: translateY(14px); transition: opacity .5s, transform .5s; }
+.rv1 { opacity: 0; transform: translateY(14px); transition: opacity .5s .12s, transform .5s .12s; }
+.rv.on, .rv1.on { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="hd">
+  <div class="hd-inner">
+    <div class="hd-brand">
+      <div class="hd-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </div>
+      <div class="hd-name">GOURIKI<span>magazine</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <span class="hero-label">マンション駐車場空き問題 解説ガイド</span>
+      <h1 class="hero-h">空き区画は<br><em>なぜ増え続け</em>、<br>何を失わせるのか。</h1>
+      <p class="hero-p">需要の変化、車種のミスマッチ、設備の老朽化——3つの要因が重なり、多くのマンションで駐車場の空き問題が静かに進行しています。まず現状を正確に把握することが、すべての判断の出発点です。</p>
+    </div>
+    <div>
+      <div class="hero-panel">
+        <div class="hp-2col">
+          <div class="hp-cell">
+            <div class="hp-n">20<span>〜40%</span></div>
+            <div class="hp-d">都市部マンションの空き率</div>
+          </div>
+          <div class="hp-cell">
+            <div class="hp-n">24.5<span>%</span></div>
+            <div class="hp-d">東京都・新築マンション<br>駐車場設置率</div>
+          </div>
+        </div>
+        <div class="hp-cell span2">
+          <div class="hp-n">30<span>%超</span></div>
+          <div class="hp-d">管理費会計の健全性に影響が出始めるライン</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WHY ===== -->
+<section class="sec sec-white">
+  <div class="w pad">
+    <div class="sl rv">なぜ増えているのか</div>
+    <h2 class="sh rv">空き率が上昇する<em>3つの構造的な要因</em></h2>
+    <p class="sp rv">「一時的な流れ」ではなく、社会全体の変化によるものです。これらの要因は今後さらに強まると予想されています。</p>
+    <div class="card3 rv">
+      <div class="c3-card">
+        <div class="c3-num">CAUSE 01</div>
+        <div class="c3-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2C5F8A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div class="c3-h">車を持たない世代の増加と高齢化</div>
+        <p class="c3-p">若い世代を中心にマイカーを持たないライフスタイルが広がり、カーシェアリングも普及しています。また築年数が経過したマンションでは高齢化・免許返納により、長年の利用者が一度に退出するケースも見られます。</p>
+        <div class="c3-note">どちらの傾向も今後さらに強まる見込み</div>
+      </div>
+      <div class="c3-card">
+        <div class="c3-num">CAUSE 02</div>
+        <div class="c3-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2C5F8A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+        <div class="c3-h">SUV・ミニバンが入らない車種制限</div>
+        <p class="c3-p">古い機械式駐車場の多くは車高・車幅制限が厳しく、近年人気のSUVや大型ミニバンが収容できません。「使いたいのに入らない」という状況が空き問題をさらに加速させます。</p>
+        <div class="c3-note">需要はあるのに収入が得られない構造</div>
+      </div>
+      <div class="c3-card">
+        <div class="c3-num">CAUSE 03</div>
+        <div class="c3-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2C5F8A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+        <div class="c3-h">設備の老朽化と部品廃番</div>
+        <p class="c3-p">設置から年数が経過すると制御装置や操作盤が廃番化し、重大故障が起きれば修理不能になります。「更新費用を払い続けるか、解体するか」という岐路が、平面化検討のきっかけになるケースが多いです。</p>
+        <div class="c3-note">更新費用の発生が決断の好機になる</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MECHANISM ===== -->
+<section class="sec sec-gray">
+  <div class="w pad">
+    <div class="sl rv">財政への影響</div>
+    <h2 class="sh rv">空き区画が管理費会計に<em>影響するしくみ</em></h2>
+    <p class="sp rv">空き区画があっても保守点検費・電気代・消耗品費は変わらず発生し続けます。「収入は減っているのに、コストは変わらない」——この構造的なジレンマが管理組合の財政を蝕みます。</p>
+    <div class="mech rv">
+      <div class="mech-item">
+        <div class="mech-dot">01</div>
+        <div class="mech-body"><div class="mech-h">空き区画が増え、使用料収入が減少する</div><p class="mech-p">稼働率が低下するほど収入が縮小。一方で保守費・電気代・消耗品費は空き区画でも発生し続ける。</p></div>
+      </div>
+      <div class="mech-item">
+        <div class="mech-dot">02</div>
+        <div class="mech-body"><div class="mech-h">管理費会計の収支バランスが崩れる</div><p class="mech-p">駐車場使用料は管理費・修繕積立金に次ぐ重要な収入源。空き区画が増えるほど、その収入の柱が崩れていく。</p></div>
+      </div>
+      <div class="mech-item">
+        <div class="mech-dot">03</div>
+        <div class="mech-body"><div class="mech-h">修繕積立金の取り崩し・建物修繕の先送りへ</div><p class="mech-p">管理費不足を補うために修繕積立金が圧迫される。外壁・配管更新など建物本来の修繕が後回しになる。</p></div>
+      </div>
+      <div class="mech-item">
+        <div class="mech-dot last">04</div>
+        <div class="mech-body last"><div class="mech-h last">先送りするほど悪化し、選択肢が狭まる</div><p class="mech-p">一時徴収金や積立金値上げが住民への突然の負担となる。対策が遅れるほど管理組合が選べる選択肢は狭まる。</p></div>
+      </div>
+    </div>
+    <div class="info-box rv1">
+      <strong>空き率30%超えは「今すぐ動く」サインです</strong>
+      <p>空き率が30%を超えた段階で、管理組合として本腰を入れた対策の検討を始めることが重要です。何もしなければ空き率はさらに上昇し、管理組合の財政への圧迫は増すばかりです。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SCENARIO ===== -->
+<section class="sec sec-white">
+  <div class="w-n pad">
+    <div class="sl rv">よくある経緯</div>
+    <h2 class="sh rv">問題が顕在化するまでの<em>典型的なシナリオ</em></h2>
+    <p class="sp rv">多くのマンションで共通して見られる経緯です。問題を先送りにすればするほど、管理組合が選べる選択肢は狭まります。</p>
+    <div class="scenario rv">
+      <div class="scenario-hd">機械式駐車場を抱えるマンションのよくある経緯</div>
+      <div class="scenario-body">
+        <div class="sc-steps">
+          <div class="sc-step"><div class="sc-dot ok">1</div><p class="sc-text"><span class="sc-label">安定期</span>稼働率が高く、駐車場使用料が管理費会計を支えている。問題は話題にならない。</p></div>
+          <div class="sc-step"><div class="sc-dot ok">2</div><p class="sc-text"><span class="sc-label">兆候期</span>若い入居者の車離れや高齢者の免許返納で空きが少しずつ増え始める。「まだ大丈夫」と判断され対策の議論に至らない。</p></div>
+          <div class="sc-step"><div class="sc-dot warn">3</div><p class="sc-text"><span class="sc-label">要注意期</span>空きが目立ち始め、SUVが入らないという声も増える。理事会で話題になるが結論は先送り。外部月極を使う住民も増加。</p></div>
+          <div class="sc-step"><div class="sc-dot warn">4</div><p class="sc-text"><span class="sc-label">転換点</span>制御装置・操作盤の交換工事が必要となり、多額の見積もりを受け取る。「更新費用を払い続けるか、解体するか」という岐路に立たされ、初めて本格的な検討が始まる。</p></div>
+          <div class="sc-step"><div class="sc-dot ng">5</div><p class="sc-text"><span class="sc-label">危機期</span>空きが慢性化し管理費会計が赤字に。修繕積立金の取り崩しが始まり、住民への一時徴収金や積立金値上げを余儀なくされ、総会が紛糾する。</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="info-box rv1">
+      <strong>更新費用の見積もりを受け取ったタイミングが決断の好機</strong>
+      <p>更新工事の見積もりと平面化の費用を同時に比較提示することで、住民への説明がしやすくなります。このタイミングを逃さないことが重要です。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CASE STUDIES ===== -->
+<section class="sec sec-gray">
+  <div class="w pad">
+    <div class="sl rv">施工事例</div>
+    <h2 class="sh rv">実際に平面化を実現した<em>3つのマンション事例</em></h2>
+    <p class="sp rv">検討から完工まで、実際の管理組合がどのように問題を解決したかをご紹介します。</p>
+    <div class="cases rv">
+      <div class="case-card">
+        <div class="case-hd">
+          <div class="case-num">01</div>
+          <div class="case-info"><span class="case-tag">都内マンション</span><div class="case-ttl">4年の検討期間を経て鋼製平面化を実現——更新費用の見積もりが決断のきっかけに</div></div>
+        </div>
+        <div class="case-body">
+          <p>築20年超・3段ピット式の機械式駐車場を設置していたマンション。住民の高齢化が進むにつれて空き区画が増加し、制御装置や操作盤などの交換工事が必要となり多額の見積もりを受け取ったことが、平面化検討の本格的なきっかけとなりました。</p>
+          <p>管理組合はまず住民アンケートを実施し、今後も利用率が回復する見込みが低いことを確認。理事会が検討経過と経済効果の試算を住民に共有し、住民説明会を丁寧に重ねた末、総会で特別決議が可決されました。工事後は大型SUVやハイルーフ車も利用可能になり、毎月かかっていた機械式の保守点検費用が不要となりました。</p>
+          <div class="case-lesson">更新費用が発生するタイミングが、平面化を決断する好機になる<span>更新見積もりと平面化費用を同時に比較提示することで、住民への説明が格段にしやすくなります</span></div>
+        </div>
+      </div>
+      <div class="case-card">
+        <div class="case-hd">
+          <div class="case-num">02</div>
+          <div class="case-info"><span class="case-tag">築26年マンション</span><div class="case-ttl">2回の段階的な平面化工事で完全移行——一度でできなくても段階的に進める選択肢</div></div>
+        </div>
+        <div class="case-body">
+          <p>1995年竣工のマンションでは、10年前に機械式駐車場の一部を埋め戻しで平面化。その後も空き区画の増加が続いたため、2021年に残りの機械式駐車場についても埋め戻し工事を実施し、すべての機械式駐車場の平面化が完了しました。</p>
+          <p>2回目の工事では同時に車路の舗装工事も実施。機械式駐車場が完全になくなったことで毎月の保守点検費用が全額削減され、管理組合の長期修繕計画に大きなゆとりが生まれました。</p>
+          <div class="case-lesson">一度で全部を平面化するのが難しい場合でも、段階的に進める選択肢がある<span>このゆとりをもとに、次のステップとして資産価値向上に向けた取り組みを検討する余裕も生まれたと言います</span></div>
+        </div>
+      </div>
+      <div class="case-card">
+        <div class="case-hd">
+          <div class="case-num">03</div>
+          <div class="case-info"><span class="case-tag">EV充電対応事例</span><div class="case-ttl">平面化後にEV充電スタンドを設置——既存の200V電源を活用してコスト節約</div></div>
+        </div>
+        <div class="case-body">
+          <p>機械式駐車場を解体・平面化した後、空いたスペースにEV充電スタンドを設置。機械式駐車場には元々200Vの電源が引かれており、その電源をそのまま活用することで比較的スムーズに導入できました。</p>
+          <p>通常、EV充電設備の後付けは新たに200Vの電源を引く工事が必要で費用も手間もかかります。平面化によって既存の電源を活用できたことで、工事の手間と費用を大幅に節約。EV・プラグインハイブリッド車の普及が加速する中、充電設備を先行整備することでマンションの資産価値向上につながりました。</p>
+          <div class="case-lesson">機械式の既存200V電源を活用してEV充電設備を低コストで導入できる<span>EV充電設備の有無はマンション選びの基準になりつつあります</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== AFTER USE ===== -->
+<section class="sec sec-white">
+  <div class="w pad">
+    <div class="sl rv">平面化後の活用</div>
+    <h2 class="sh rv">できあがったスペースを<em>どう活用するか</em></h2>
+    <p class="sp rv">平面化後のスペース活用計画を事前に総会議案書に盛り込むことで、住民の合意が得やすくなります。</p>
+    <div class="use-grid rv">
+      <div class="use-card">
+        <div class="use-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2C5F8A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+        <div class="use-h">平面駐車場として活用</div>
+        <p class="use-p">大型車・ハイルーフ車の利用が可能になるため、これまで使いたくても使えなかった住民が新たに契約するケースも期待できます。</p>
+        <span class="use-tag">最もシンプル</span>
+      </div>
+      <div class="use-card">
+        <div class="use-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2C5F8A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <div class="use-h">EV充電スタンドの設置</div>
+        <p class="use-p">機械式の既存200V電源を活用して比較的低コストで導入可能。充電設備の有無はマンション選びの重要な基準になりつつあります。</p>
+        <span class="use-tag">資産価値向上</span>
+      </div>
+      <div class="use-card">
+        <div class="use-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2C5F8A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+        <div class="use-h">カーシェアリング区画の設置</div>
+        <p class="use-p">カーシェアリング事業者と提携し、一部区画をシェアカー用に提供。車を持たない住民の利便性向上に加え、事業者からの賃料収入も期待できます。</p>
+        <span class="use-tag">新収入源</span>
+      </div>
+      <div class="use-card">
+        <div class="use-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2C5F8A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18.5" cy="17.5" r="2.5"/><circle cx="5.5" cy="17.5" r="2.5"/><path d="M15 6H9l-3 8h12L15 6z"/></svg></div>
+        <div class="use-h">駐輪場・来客用スペースへの転用</div>
+        <p class="use-p">多くのマンションで駐輪場の台数不足が問題になっており、平面化で生まれたスペースの有効活用として適した選択肢のひとつです。</p>
+        <span class="use-tag">多目的活用</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== VACANCY LOSS ===== -->
+<section class="sec sec-blue">
+  <div class="w pad">
+    <div class="sl rv">空き駐車場の実態</div>
+    <h2 class="sh rv">「空いているだけ」ではない——<em>空き駐車場が生む3つの損失</em></h2>
+    <p class="sp rv">多くの管理組合が見落としているのが、空き区画が生み出す複合的な損失です。収入の欠損だけでなく、マンション全体の価値と住民間の公平性にも影響します。</p>
+    <div class="card3 rv">
+      <div class="c3-card">
+        <div class="c3-num">LOSS 01</div>
+        <div class="c3-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2C5F8A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div class="c3-h">収入の欠損と維持費の固定</div>
+        <p class="c3-p">使用料収入はゼロでも、保守点検費・電気代・消耗品費は空き区画でも変わらず発生し続けます。収入は減る一方、コストは減らないという構造的なジレンマです。</p>
+      </div>
+      <div class="c3-card">
+        <div class="c3-num">LOSS 02</div>
+        <div class="c3-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2C5F8A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div class="c3-h">住民間の不公平感</div>
+        <p class="c3-p">空き区画の維持費は、駐車場を使っていない住民も間接的に負担します。「なぜ使わない設備のために管理費を払うのか」という不満が、管理組合の合意形成を難しくします。</p>
+      </div>
+      <div class="c3-card">
+        <div class="c3-num">LOSS 03</div>
+        <div class="c3-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2C5F8A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <div class="c3-h">マンションの資産価値への影響</div>
+        <p class="c3-p">ガラガラの駐車場は管理状態の悪化として購入検討者に見られます。修繕積立金の不足や管理費の値上げが続けば、売却価格にも影響が出始めます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== APPROACHES ===== -->
+<section class="sec sec-white">
+  <div class="w-n pad">
+    <div class="sl rv">対策の考え方</div>
+    <h2 class="sh rv">空き駐車場問題への<em>3つのアプローチ</em>と限界</h2>
+    <p class="sp rv">それぞれの特徴と限界を正しく理解した上で、自分のマンションの状況に合った判断を行うことが重要です。</p>
+    <div class="mech rv">
+      <div class="mech-item">
+        <div class="mech-dot">A</div>
+        <div class="mech-body"><div class="mech-h">外部への貸し出し——応急処置として有効だが根本解決にはならない</div><p class="mech-p">周辺住民や近隣オフィス勤務者に空き区画を貸し出すことで、短期的に収入の減少分を補える可能性があります。ただし管理規約による制限の確認、外部者の敷地内出入りへの住民の抵抗感、周辺相場によっては十分な収益が見込めないケースもあり、あくまでも一時的な補填策として位置づけることが重要です。</p></div>
+      </div>
+      <div class="mech-item">
+        <div class="mech-dot">B</div>
+        <div class="mech-body"><div class="mech-h">料金の見直し・カーシェア導入——需要の掘り起こしに有効</div><p class="mech-p">月額使用料を周辺相場に合わせて見直すことで契約者を増やせる場合があります。またカーシェアリング事業者と提携して空きスペースをシェアカー用に活用する取り組みも増えており、車を持たない住民の利便性向上にも貢献します。ただし料金の安易な引き下げは収入のさらなる減少を招くリスクもあるため、十分な試算が必要です。</p></div>
+      </div>
+      <div class="mech-item">
+        <div class="mech-dot last">C</div>
+        <div class="mech-body last"><div class="mech-h last">機械式駐車場の解体・平面化——老朽化が進む場合の根本解決策</div><p class="mech-p">空き率の高さが慢性化し設備の老朽化も進んでいる場合、最も根本的な解決策が機械式駐車場の解体と平面化です。短期的には工事費用が発生しますが、長期的には維持費が大幅に削減され、大型車も入庫できる使いやすい駐車場に生まれ変わります。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="sec sec-gray">
+  <div class="w-n pad">
+    <div class="sl rv">FAQ</div>
+    <h2 class="sh rv">よくある<em>ご質問</em></h2>
+    <div class="faq-list rv">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this.parentElement)"><span class="faq-q-txt">Q. 平面化工事にはどのくらいの期間がかかりますか？</span><svg class="faq-ico" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+        <div class="faq-ans"><p>工事そのものは規模や工法によって数週間〜数ヶ月程度です。ただし、住民への説明・アンケート・説明会・総会での特別決議といった合意形成のプロセスを含めると、検討開始から着工まで数年かかるケースもあります。早めに検討を始めることが重要です。</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this.parentElement)"><span class="faq-q-txt">Q. 総会の特別決議に必要な賛成票は何割ですか？</span><svg class="faq-ico" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+        <div class="faq-ans"><p>機械式駐車場の解体・平面化は「共用部分の変更」に該当するため、区分所有法に基づき全区分所有者の4分の3以上の賛成が必要な特別決議となります。事前の住民説明と合意形成のプロセスを丁寧に進めることが、可決への近道です。</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this.parentElement)"><span class="faq-q-txt">Q. 附置義務条例がある場合、平面化はできませんか？</span><svg class="faq-ico" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+        <div class="faq-ans"><p>附置義務条例がある自治体でも、近年は車の所有率が低下している現状から国土交通省でも条例の見直しが図られており、特例として平面化を認める動きが各自治体で見られています。まずお住まいの自治体に附置義務の適用有無と特例申請の可否を確認することが、平面化検討の第一歩です。</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this.parentElement)"><span class="faq-q-txt">Q. 鋼製平面化と埋め戻し、どちらが適していますか？</span><svg class="faq-ico" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+        <div class="faq-ans"><p>地盤が弱い場合・地下水位が高い場合は、軽量な鋼製平面化工法が適しているケースが多いです。埋め戻し工法は地盤良好な屋外で費用を抑えたい場合に検討されますが、施工前に必ず地盤調査を行い、地盤沈下や周辺建物へのひび割れリスクを専門家に判断してもらうことが重要です。</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this.parentElement)"><span class="faq-q-txt">Q. 平面化後に駐車台数が減った場合、どうすればいいですか？</span><svg class="faq-ico" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+        <div class="faq-ans"><p>機械式から平面化すると一般的に収容台数は減少します。既存の契約者への対応として、利用区画の再抽選や優先順位のルールを事前に決めておくことが重要です。また外部貸し出し・カーシェアリング区画の設置・EV充電スペースの整備など、台数減少を補う収益化の方法も合わせて検討することをお勧めします。</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this.parentElement)"><span class="faq-q-txt">Q. 大規模修繕のタイミングと合わせるべきですか？</span><svg class="faq-ico" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+        <div class="faq-ans"><p>機械式駐車場の撤去・平面化工事は、マンションの大規模修繕工事と合わせて実施することで工事の効率化やコストの節約が期待できます。どうせ足場を組む工事が入るなら、その機会に合わせて平面化工事も検討するという視点で、長期修繕計画全体を見直すことをお勧めします。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ARTICLES ===== -->
+<section class="sec sec-white">
+  <div class="w pad">
+    <div class="sl rv">関連コラム</div>
+    <h2 class="sh rv">駐車場空き問題を<em>深掘りする</em>コラム</h2>
+    <div class="arts rv">
+      <a href="https://gouriki.co.jp/column/%e3%83%9e%e3%83%b3%e3%82%b7%e3%83%a7%e3%83%b3%e9%a7%90%e8%bb%8a%e5%a0%b4%e3%81%ae%e7%a9%ba%e3%81%8d%e3%81%af%e3%80%8c%e9%9d%99%e3%81%8b%e3%81%aa%e5%87%ba%e8%a1%80%e3%80%8d%e2%80%95%e2%80%95%e7%ae%a1/" target="_blank" class="art"><div class="art-accent"></div><div class="art-body"><span class="art-cat">空き問題</span><p class="art-t">駐車場の空きは「静かな出血」――管理組合が直視すべき財政崩壊のリスク</p><p class="art-d">2026.03.16</p></div></a>
+      <a href="https://gouriki.co.jp/column/%e3%83%9e%e3%83%b3%e3%82%b7%e3%83%a7%e3%83%b3%e9%a7%90%e8%bb%8a%e5%a0%b4%e3%81%ae%e7%a9%ba%e3%81%8d%e7%8e%87%e3%81%8c30%e3%82%92%e8%b6%85%e3%81%88%e3%81%9f%e3%82%89%e8%80%83%e3%81%88%e3%82%8b%e3%81%b9/" target="_blank" class="art"><div class="art-accent"></div><div class="art-body"><span class="art-cat">空き問題</span><p class="art-t">空き率が30%を超えたら考えるべきこと｜今すぐ動くべき理由と解決策</p><p class="art-d">2026.03.16</p></div></a>
+      <a href="https://gouriki.co.jp/column/%e3%83%9e%e3%83%b3%e3%82%b7%e3%83%a7%e3%83%b3%e9%a7%90%e8%bb%8a%e5%a0%b4%e3%81%ae%e5%88%a9%e7%94%a8%e7%8e%87%e4%bd%8e%e4%b8%8b%e3%82%92%e8%a7%a3%e6%b1%ba%e3%81%99%e3%82%8b%e6%96%b9%e6%b3%95/" target="_blank" class="art"><div class="art-accent"></div><div class="art-body"><span class="art-cat">空き問題</span><p class="art-t">マンション駐車場の利用率低下を解決する方法</p><p class="art-d">2026.03.02</p></div></a>
+      <a href="https://gouriki.co.jp/column/%e6%a9%9f%e6%a2%b0%e5%bc%8f%e9%a7%90%e8%bb%8a%e5%a0%b4%e3%81%ae%e8%80%81%e6%9c%bd%e5%8c%96%e5%af%be%e7%ad%96%e3%82%ac%e3%82%a4%e3%83%89/" target="_blank" class="art"><div class="art-accent"></div><div class="art-body"><span class="art-cat">空き問題</span><p class="art-t">機械式駐車場の老朽化対策ガイド</p><p class="art-d">2026.02.22</p></div></a>
+      <a href="https://gouriki.co.jp/column/%e3%83%9e%e3%83%b3%e3%82%b7%e3%83%a7%e3%83%b3%e3%81%ae%e8%b3%87%e7%94%a3%e4%be%a1%e5%80%a4%e3%82%92%e9%ab%98%e3%82%81%e3%82%8b%e9%a7%90%e8%bb%8a%e5%a0%b4%e3%81%ae%e6%b4%bb%e7%94%a8%e6%96%b9%e6%b3%95/" target="_blank" class="art"><div class="art-accent"></div><div class="art-body"><span class="art-cat">空き問題</span><p class="art-t">マンションの資産価値を高める駐車場の活用方法</p><p class="art-d">2026.02.22</p></div></a>
+      <a href="https://gouriki.co.jp/column/%e3%83%9e%e3%83%b3%e3%82%b7%e3%83%a7%e3%83%b3%e3%81%ae%e9%a7%90%e8%bb%8a%e5%a0%b4%e3%81%af%e9%87%91%e9%a3%9f%e3%81%84%e8%99%ab%e3%81%aa%e3%81%ae%e3%81%8b%ef%bc%9f%e5%95%8f%e9%a1%8c/" target="_blank" class="art"><div class="art-accent"></div><div class="art-body"><span class="art-cat">空き問題</span><p class="art-t">マンションの駐車場は"金食い虫"なのか？問題点と対策を徹底解説</p><p class="art-d">2026.02.06</p></div></a>
+    </div>
+    <div style="text-align:right;margin-top:.75rem;">
+      <a href="https://gouriki.co.jp/column_category/vacancy/" target="_blank" style="font-size:.78rem;font-weight:700;color:var(--blue);text-decoration:none;display:inline-flex;align-items:center;gap:.3rem;">
+        空き問題コラムをすべて見る
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<div class="cta">
+  <div class="cta-bg"></div>
+  <div class="cta-in">
+    <p class="cta-lbl">HANDBOOK</p>
+    <p class="cta-h">駐車場空き問題 実務ガイドブック</p>
+    <p class="cta-p">空き率の現状把握・対策の選び方・平面化の費用目安をまとめた無料資料です。</p>
+    <a href="https://gouriki.co.jp/handbook/" target="_blank" class="btn-white">
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      無料ダウンロード
+    </a>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="ft-w">
+    <div class="ft-grid">
+      <div>
+        <div class="ft-h">株式会社GOURIKIコーポレーション</div>
+        <p class="ft-p">〒134-0085 東京都江戸川区南葛西6-13-14<br>TEL: 03-3877-0993<br>千葉工場：〒275-0001 千葉県習志野市東習志野7-1-1<br>代表取締役：山﨑 剛</p>
+      </div>
+      <div class="ft-links">
+        <div class="ft-h">Links</div>
+        <ul>
+          <li><a href="https://gouriki.co.jp/about/" target="_blank">会社案内</a></li>
+          <li><a href="https://gouriki.co.jp/smart-deck/" target="_blank">SMART DECK</a></li>
+          <li><a href="https://gouriki.co.jp/ai-parking/" target="_blank">AI PARKING</a></li>
+          <li><a href="https://gouriki.co.jp/case/" target="_blank">施工事例</a></li>
+          <li><a href="https://gouriki.co.jp/column/" target="_blank">コラム</a></li>
+          <li><a href="https://gouriki.co.jp/contact" target="_blank">お問い合わせ</a></li>
+        </ul>
+      </div>
+      <div class="ft-links">
+        <div class="ft-h">主要特許</div>
+        <ul>
+          <li><a style="cursor:default;">特許 第7681455号｜SMART DECK</a></li>
+          <li><a style="cursor:default;">特許 第7681454号｜SMART BOX</a></li>
+          <li><a style="cursor:default;">特許 第7223962号｜車室認証装置</a></li>
+          <li><a style="cursor:default;">特許 第7277879号｜ナンバー認識装置</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ft-sns">
+      <a href="https://www.youtube.com/@gouriki" target="_blank" aria-label="YouTube Official" style="background:#dc2626;border-radius:9999px;padding:.45rem 1rem;color:white;font-size:.74rem;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:.35rem;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        YouTube Official
+      </a>
+      <a href="https://www.instagram.com/gourikicorporation/" target="_blank" aria-label="Instagram Official" style="background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);border-radius:9999px;padding:.45rem 1rem;color:white;font-size:.74rem;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:.35rem;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+        Instagram Official
+      </a>
+    </div>
+    <p class="ft-copy">&copy; 2026 株式会社GOURIKIコーポレーション All Rights Reserved.</p>
+  </div>
+</footer>
+
+<script>
+lucide.createIcons();
+document.querySelectorAll('.rv,.rv1').forEach(el => {
+  new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); obs.unobserve(e.target); } });
+  }, { threshold: .08 }).observe(el);
+});
+function toggleFaq(el) {
+  document.querySelectorAll('.faq-item').forEach(f => { if (f !== el) f.classList.remove('open'); });
+  el.classList.toggle('open');
+}
+</script>
+</body>
+</html>
