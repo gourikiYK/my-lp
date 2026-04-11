@@ -21,53 +21,75 @@
         .text-gouriki-accent { color: #E67E22; }
 
         .kanban-header {
-            background-color: #002B5B;
+            background: linear-gradient(105deg, #0e2444 0%, #002B5B 55%, #081929 100%);
             border-bottom: 4px solid #E67E22;
             position: relative;
             overflow: hidden;
         }
-        .kanban-header::before { display: none; }
         .kanban-inner {
             position: relative;
             z-index: 1;
             max-width: 1100px;
             margin: 0 auto;
-            padding: 1rem 1.5rem 0.85rem;
+            padding: 1rem 2rem 0.85rem;
             display: flex;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: space-between;
             gap: 2rem;
             flex-wrap: wrap;
         }
         .kanban-left { display: flex; align-items: center; gap: 1.25rem; }
-        .kanban-icon-wrap {
-            width: 52px; height: 52px;
-            background: #E67E22;
-            border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
+        .kanban-logo-wrap { flex-shrink: 0; display: flex; align-items: center; }
+        .kanban-logo-wrap img { height: 38px; width: auto; }
+        .kanban-divider-v {
+            width: 1px;
+            height: 36px;
+            background: rgba(255,255,255,0.2);
             flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(230,126,34,0.4);
         }
         .kanban-brand { display: flex; flex-direction: column; gap: 0.2rem; }
-        .kanban-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.18em; color: #E67E22; text-transform: uppercase; }
-        .kanban-title { font-size: 1.45rem; font-weight: 900; color: #fff; letter-spacing: 0.04em; line-height: 1.2; }
-        .kanban-title span { color: #E67E22; }
-        .kanban-sub { font-size: 0.65rem; color: rgba(255,255,255,0.45); letter-spacing: 0.08em; margin-top: 0.15rem; }
-        .kanban-tagline {
-            font-size: 0.78rem;
-            color: rgba(255,255,255,0.6);
-            border-left: 2px solid #E67E22;
-            padding-left: 0.75rem;
-            line-height: 1.6;
-            max-width: 320px;
+        .kanban-title {
+            font-size: 1.45rem;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 0.04em;
+            line-height: 1.2;
         }
-        .kanban-tagline strong { color: #fff; display: block; font-size: 0.82rem; margin-bottom: 0.2rem; }
-        .kanban-divider {
-            height: 1px;
-            background: linear-gradient(to right, rgba(255,255,255,0.08), rgba(230,126,34,0.3), rgba(255,255,255,0.08));
-            max-width: 1100px;
-            margin: 0 auto;
+        .kanban-title span { color: #E67E22; font-weight: 400; }
+        .kanban-sub {
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 0.12em;
+            margin-top: 0.1rem;
         }
+        .kanban-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(230,126,34,0.12);
+            border: 1px solid rgba(230,126,34,0.35);
+            border-radius: 2px;
+            padding: 0.3rem 0.85rem;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #E67E22;
+            letter-spacing: 0.1em;
+            white-space: nowrap;
+        }
+        .kanban-badge::before {
+            content: '';
+            display: block;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #E67E22;
+        }
+        /* legacy classes no longer used */
+        .kanban-icon-wrap { display: none; }
+        .kanban-label { display: none; }
+        .kanban-tagline { display: none; }
+        .kanban-divider { display: none; }
 
         .ba-slider { position: relative; width: 100%; height: 400px; overflow: hidden; border-radius: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
         .ba-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.2s ease-in-out; }
@@ -312,31 +334,23 @@
 </head>
 <body id="top" class="bg-white">
 
-<header class="kanban-header" style="
-  background: linear-gradient(90deg, #082B5B 0%, #0A3A78 100%);
-  padding: 1.2rem 2rem;
-  border-bottom: 4px solid #E67E22;
-">
-  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:1.75rem;">
-
-    <!-- ロゴ（小さめ・余白広め） -->
-    <img 
-      src="/theme1/logo.png"
-      alt="GOURIKI Corporation"
-      style="height:40px;width:auto;flex-shrink:0;">
-
-    <!-- テキストブロック（階層を明確に） -->
-    <div style="display:flex;flex-direction:column;gap:0.25rem;">
-      <div style="font-size:1.55rem;font-weight:900;color:#fff;letter-spacing:0.03em;">
-        GOURIKI<span style="color:#E67E22;">magazine</span>
+<!-- ===== HEADER ===== -->
+<header class="kanban-header">
+  <div class="kanban-inner">
+    <div class="kanban-left">
+      <div class="kanban-logo-wrap">
+        <img src="/theme1/logo.png" alt="GOURIKI Corporation">
       </div>
-      <div style="font-size:0.75rem;color:rgba(255,255,255,0.65);letter-spacing:0.08em;">
-        マンション管理組合向け 駐車場解決ガイド
+      <div class="kanban-divider-v"></div>
+      <div class="kanban-brand">
+        <div class="kanban-title">GOURIKI<span>magazine</span></div>
+        <div class="kanban-sub">マンション管理組合向け 駐車場解決ガイド</div>
       </div>
     </div>
-
+  
   </div>
 </header>
+
 
 
 

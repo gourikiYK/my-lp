@@ -25,18 +25,93 @@ html { scroll-behavior: smooth; }
 body { font-family: 'Noto Serif JP', serif; background: var(--paper); color: var(--ink); line-height: 1.85; }
 
 /* ===== HEADER ===== */
-.kanban-header { background: var(--ink); border-bottom: 3px solid var(--forest-m); }
-.kanban-inner { max-width: 1100px; margin: 0 auto; padding: 1.25rem 1.5rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
-.kanban-left { display: flex; align-items: center; gap: 1rem; }
-.kanban-icon-wrap { width: 46px; height: 46px; background: var(--forest-m); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.kanban-brand { display: flex; flex-direction: column; gap: .1rem; }
-.kanban-label { font-family: 'Noto Sans JP', sans-serif; font-size: .6rem; font-weight: 700; letter-spacing: .2em; color: #52b788; text-transform: uppercase; }
-.kanban-title { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 900; color: #fff; line-height: 1.1; }
-.kanban-title span { font-family: 'Noto Sans JP', sans-serif; font-weight: 700; font-size: 1rem; color: #52b788; margin-left: .25rem; }
-.kanban-sub { font-family: 'Noto Sans JP', sans-serif; font-size: .62rem; color: rgba(255,255,255,.45); letter-spacing: .05em; margin-top: .15rem; }
-.kanban-tagline { font-family: 'Noto Sans JP', sans-serif; font-size: .72rem; color: rgba(255,255,255,.55); line-height: 1.85; max-width: 380px; border-left: 2px solid var(--forest-m); padding-left: 1rem; }
-.kanban-tagline strong { display: block; color: #fff; font-size: .82rem; margin-bottom: .2rem; }
-.kanban-divider { height: 2px; background: linear-gradient(90deg, var(--forest-m) 0%, transparent 100%); max-width: 1100px; margin: 0 auto; opacity: .35; }
+.kanban-header {
+  background: #0d1f3c;
+  border-bottom: 4px solid #E67E22;
+  position: relative;
+  overflow: hidden;
+}
+.kanban-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, #162d52 0%, #0d1f3c 55%, #0a1828 100%);
+  pointer-events: none;
+}
+
+.kanban-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+.kanban-left { display: flex; align-items: center; gap: 1.25rem; }
+.kanban-logo-wrap {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+.kanban-logo-wrap img { height: 38px; width: auto; }
+.kanban-divider-v {
+  width: 1px;
+  height: 36px;
+  background: rgba(255,255,255,.2);
+  flex-shrink: 0;
+}
+.kanban-brand { display: flex; flex-direction: column; gap: .2rem; }
+.kanban-title {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+  letter-spacing: .02em;
+}
+.kanban-title span {
+  color: #E67E22;
+  font-weight: 400;
+  font-size: 1.35rem;
+}
+.kanban-sub {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: .68rem;
+  color: rgba(255,255,255,.55);
+  letter-spacing: .12em;
+}
+.kanban-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  background: rgba(230,126,34,.12);
+  border: 1px solid rgba(230,126,34,.35);
+  border-radius: 2px;
+  padding: .3rem .85rem;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: .65rem;
+  font-weight: 700;
+  color: #E67E22;
+  letter-spacing: .1em;
+  white-space: nowrap;
+}
+.kanban-badge::before {
+  content: '';
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #E67E22;
+}
+/* legacy classes kept for compatibility */
+.kanban-icon-wrap { display: none; }
+.kanban-label { display: none; }
+.kanban-tagline { display: none; }
+.kanban-divider { display: none; }
 
 /* ===== CHAPTER BANNER ===== */
 .chapter-banner { background: var(--ink); padding: 4.5rem 1.5rem 3.5rem; position: relative; overflow: hidden; }
@@ -160,25 +235,18 @@ td:first-child { font-weight: 700; color: var(--ink); }
 <body>
 
 <!-- ===== HEADER ===== -->
-<header class="kanban-header" style="
-background: #111827;
-padding: 1.2rem 2rem;
-border-bottom: 4px solid #E67E22;
-">
-  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:1.75rem;">
-    <img
-      src="/theme1/logo.png"
-      alt="GOURIKI Corporation"
-      style="height:40px;width:auto;flex-shrink:0;"
-    >
-    <div style="display:flex;flex-direction:column;gap:0.25rem;">
-      <div style="font-size:1.55rem;font-weight:900;color:#fff;letter-spacing:0.03em;">
-        GOURIKI<span style="color:#E67E22;">magazine</span>
+<header class="kanban-header">
+  <div class="kanban-inner">
+    <div class="kanban-left">
+      <div class="kanban-logo-wrap">
+        <img src="/theme1/logo.png" alt="GOURIKI Corporation">
       </div>
-      <div style="font-size:0.75rem;color:rgba(255,255,255,0.65);letter-spacing:0.08em;">
-        駐車場平面化 実務ガイド
+      <div class="kanban-divider-v"></div>
+      <div class="kanban-brand">
+        <div class="kanban-title">GOURIKI<span>magazine</span></div>
+        <div class="kanban-sub">駐車場平面化 実務ガイド</div>
       </div>
-    </div>
+    
   </div>
 </header>
 
