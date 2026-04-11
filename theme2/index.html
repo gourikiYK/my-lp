@@ -160,22 +160,30 @@ td:first-child { font-weight: 700; color: var(--ink); }
 <body>
 
 <!-- HEADER -->
-<header class="kanban-header">
-  <div class="kanban-inner">
-    <div class="kanban-left">
-      <div class="kanban-icon-wrap">
-      <img 
+<header class="kanban-header" style="
+  background: linear-gradient(90deg, #082B5B 0%, #0A3A78 100%);
+  padding: 1.2rem 2rem;
+  border-bottom: 4px solid #E67E22;
+">
+  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:1.75rem;">
+
+    <!-- ロゴ（小さめ・余白広め） -->
+    <img 
       src="/theme2/logo.png"
       alt="GOURIKI Corporation"
       style="height:40px;width:auto;flex-shrink:0;">
+
+    <!-- テキストブロック（階層を明確に） -->
+    <div style="display:flex;flex-direction:column;gap:0.25rem;">
+      <div style="font-size:1.55rem;font-weight:900;color:#fff;letter-spacing:0.03em;">
+        GOURIKI<span style="color:#E67E22;">magazine</span>
       </div>
-      <div class="kanban-brand">
-        <span class="kanban-label">GOURIKI Corporation</span>
-        <div class="kanban-title">GOURIKI<span>magazine</span></div>
+      <div style="font-size:0.75rem;color:rgba(255,255,255,0.65);letter-spacing:0.08em;">
+        マンション管理組合のための専門情報誌
       </div>
     </div>
+
   </div>
-  <div class="kanban-divider"></div>
 </header>
 
 <!-- 第一章 -->
