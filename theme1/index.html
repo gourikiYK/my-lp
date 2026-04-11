@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>マンション管理組合向け 駐車場解決ガイド | 株式会社GOURIKIコーポレーション</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -144,28 +145,41 @@
             box-shadow: 0 6px 24px rgba(82,183,136,0.35);
         }
 
-        /* --- お問い合わせフォーム --- */
+        /* --- お問い合わせボタン（ヘッダー内） --- */
         #popupContactTrigger {
-          position: fixed;
-          bottom: 20px;
-          right: 20px;
-          width: 56px;
-          height: 56px;
-          border-radius: 50%;
-          background: #667eea; /* サイトのメインカラーに合わせました */
+          display: inline-flex;
+          align-items: center;
+          gap: 0.6rem;
+          background: rgba(41,171,226,0.9);
           color: white;
           border: none;
-          box-shadow: 0 4px 14px rgba(102, 126, 234, 0.4);
+          border-radius: 9999px;
+          padding: 0.55rem 0.55rem 0.55rem 1.25rem;
+          font-family: 'Noto Sans JP', sans-serif;
+          font-size: 0.78rem;
+          font-weight: 700;
           cursor: pointer;
+          letter-spacing: 0.05em;
+          transition: background 0.2s;
+          white-space: nowrap;
+          flex-shrink: 0;
+        }
+        #popupContactTrigger:hover {
+          background: rgba(26,146,196,1);
+        }
+        #popupContactTrigger .btn-arrow {
           display: flex;
           align-items: center;
           justify-content: center;
-          z-index: 999998;
-          transition: transform 0.2s, box-shadow 0.2s;
+          width: 28px;
+          height: 28px;
+          background: #fff;
+          border-radius: 50%;
+          color: #29ABE2;
+          flex-shrink: 0;
         }
-        #popupContactTrigger:hover {
-          transform: scale(1.05);
-          box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        #popupContactTrigger .btn-arrow .material-icons {
+          font-size: 1rem;
         }
         #popupContactOverlay {
           position: fixed;
@@ -347,7 +361,10 @@
         <div class="kanban-sub">マンション管理組合向け 駐車場解決ガイド</div>
       </div>
     </div>
-  
+    <button id="popupContactTrigger" aria-label="お問い合わせ">
+      お問い合わせ
+      <span class="btn-arrow"><span class="material-icons">arrow_forward</span></span>
+    </button>
   </div>
 </header>
 
@@ -776,13 +793,6 @@ document.querySelectorAll('.reveal').forEach(el => {
 
 
 <!-- お問い合わせフォーム -->
-<!-- ボタン -->
-<button id="popupContactTrigger" aria-label="お問い合わせ">
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>
-</button>
 
 <!-- お問い合わせポップアップ -->
 <div id="popupContactOverlay">
