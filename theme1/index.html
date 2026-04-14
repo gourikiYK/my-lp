@@ -419,13 +419,15 @@
 
 <section class="py-20 px-6 bg-gouriki-navy">
     <div class="max-w-4xl mx-auto">
-        <p class="text-center text-xs font-bold mb-2" style="color:#E67E22; letter-spacing:0.2em;">FEATURED VIDEO</p>
-        <h3 class="text-center text-white font-bold text-xl mb-4" style="line-height:1.6;">取材動画で見る、駐車場問題の実態</h3>
-        <div class="flex items-center gap-3 mb-6">
-            <div class="flex-1" style="height:1px; background:rgba(230,126,34,0.25);"></div>
-            <div style="width:6px; height:6px; background:#E67E22; border-radius:50%;"></div>
-            <div class="flex-1" style="height:1px; background:rgba(230,126,34,0.25);"></div>
+        <div class="flex items-center gap-3 mb-5">
+            <span style="display:inline-flex;align-items:center;gap:0.4rem;background:#E67E22;color:#fff;font-size:0.7rem;font-weight:700;letter-spacing:0.18em;padding:0.35rem 0.9rem;border-radius:2px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><polygon points="8,5 19,12 8,19"/></svg>
+                PICKUP VIDEO
+            </span>
+            <div class="flex-1" style="height:1px; background:rgba(230,126,34,0.2);"></div>
         </div>
+        <h3 class="text-white font-bold mb-3" style="font-size:1.35rem;line-height:1.65;">全国の管理組合が直面する<br>「空き駐車場」問題の実態</h3>
+
 <div class="relative w-full rounded-xl overflow-hidden" style="padding-top:56.25%; border:2px solid rgba(230,126,34,0.5);">
     <div id="yt-facade" style="position:absolute;inset:0;cursor:pointer;" onclick="
         var iframe=document.createElement('iframe');
@@ -780,6 +782,23 @@
 <script>
 lucide.createIcons();
 function toggleFaq(el) { el.classList.toggle('active'); }
+
+// BEFORE / AFTER スライダー（4秒ごとに自動切り替え）
+const imgBefore = document.getElementById('img-before');
+const imgAfter  = document.getElementById('img-after');
+const lblBefore = document.getElementById('label-before');
+const lblAfter  = document.getElementById('label-after');
+let showAfter = false;
+setInterval(() => {
+    if (!showAfter) {
+        imgBefore.classList.remove('active'); imgAfter.classList.add('active');
+        lblBefore.style.opacity = '0'; lblAfter.style.opacity = '1';
+    } else {
+        imgAfter.classList.remove('active'); imgBefore.classList.add('active');
+        lblAfter.style.opacity = '0'; lblBefore.style.opacity = '1';
+    }
+    showAfter = !showAfter;
+}, 4000);
 document.querySelectorAll('.reveal').forEach(el => {
   new IntersectionObserver((entries, obs) => {
     entries.forEach(e => {
