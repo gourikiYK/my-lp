@@ -116,7 +116,7 @@
   document.head.appendChild(style);
 
   document.body.insertAdjacentHTML('beforeend', `
-    <button id="gc-fab" aria-label="AIチャット相談">
+    <button id="gc-fab" aria-label="相談チャット">
       <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
       <div id="gc-badge">1</div>
     </button>
@@ -127,7 +127,7 @@
         </div>
         <div class="gc-h-text">
           <h3>GOURIKI 相談チャット</h3>
-          <p>お気軽にご相談ください</p>
+          <p>駐車場問題をすぐに解決</p>
         </div>
         <button id="gc-close" aria-label="閉じる">×</button>
       </div>
@@ -175,7 +175,7 @@
   ];
 
   const initMsgs = [
-    { role:'bot', text:'こんにちは！GOURIKIの駐車場相談AIです。\n機械式駐車場に関するお悩みをお気軽にどうぞ。', qr:['費用を知りたい','スマートデッキって何？','工事期間は？','無料調査を申込む'] }
+    { role:'bot', text:'こんにちは！GOURIKIの駐車場相談窓口です。\n機械式駐車場に関するお悩みをお気軽にどうぞ。', qr:['費用を知りたい','スマートデッキって何？','工事期間は？','無料調査を申込む'] }
   ];
 
   function addMsg(role, text, qr) {
