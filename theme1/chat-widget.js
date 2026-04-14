@@ -120,14 +120,14 @@
       <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
       <div id="gc-badge">1</div>
     </button>
-    <div id="gc-win" role="dialog" aria-label="GOURIKI相談AI">
+    <div id="gc-win" role="dialog" aria-label="GOURIKI相談チャット">
       <div id="gc-header">
         <div class="gc-h-icon">
           <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
         </div>
         <div class="gc-h-text">
-          <h3>GOURIKI 相談AI</h3>
-          <p>駐車場問題をすぐに解決</p>
+          <h3>GOURIKI 相談チャット</h3>
+          <p>お気軽にご相談ください</p>
         </div>
         <button id="gc-close" aria-label="閉じる">×</button>
       </div>
