@@ -418,35 +418,28 @@
     </section>
 
 <section class="py-20 px-6 bg-gouriki-navy">
-    <div class="max-w-5xl mx-auto">
-        <div class="flex flex-col lg:flex-row items-center gap-10">
-            <!-- 左：テキスト -->
-            <div class="lg:w-2/5 w-full flex-shrink-0">
-                <span style="display:inline-flex;align-items:center;gap:0.4rem;background:#E67E22;color:#fff;font-size:0.65rem;font-weight:700;letter-spacing:0.18em;padding:0.3rem 0.85rem;border-radius:2px;margin-bottom:1.2rem;">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="white"><polygon points="8,5 19,12 8,19"/></svg>
-                    PICKUP VIDEO
-                </span>
-                <h3 class="text-white font-bold" style="font-size:1.45rem;line-height:1.7;margin-bottom:1rem;">全国の管理組合が<br>直面する<br>「空き駐車場」<br>問題の実態</h3>
-                <div style="width:32px;height:3px;background:#E67E22;border-radius:2px;margin-bottom:1rem;"></div>
-                <p style="color:rgba(255,255,255,0.5);font-size:0.75rem;line-height:1.9;">データと現場映像で徹底解説。<br>管理組合関係者から注目を集める動画です。</p>
-            </div>
-            <!-- 右：動画 -->
-            <div class="lg:w-3/5 w-full">
-                <div class="relative w-full rounded-xl overflow-hidden" style="padding-top:56.25%; box-shadow:0 20px 50px rgba(0,0,0,0.4); border:1px solid rgba(230,126,34,0.3);">
-                    <div id="yt-facade" style="position:absolute;inset:0;cursor:pointer;" onclick="
-                        var iframe=document.createElement('iframe');
-                        iframe.setAttribute('src','https://www.youtube.com/embed/47liU0HzUy4?autoplay=1');
-                        iframe.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
-                        iframe.setAttribute('allowfullscreen','');
-                        iframe.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:0;';
-                        this.replaceWith(iframe);
-                    ">
-                        <img src="https://i.ytimg.com/vi/47liU0HzUy4/maxresdefault.jpg" alt="動画サムネイル" style="width:100%;height:100%;object-fit:cover;">
-                        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;">
-                            <div style="width:68px;height:68px;background:#dc2626;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(220,38,38,0.5);">
-                                <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><polygon points="8,5 19,12 8,19"/></svg>
-                            </div>
-                        </div>
+    <div class="max-w-4xl mx-auto">
+        <div class="flex items-center gap-3 mb-5">
+            <span style="display:inline-flex;align-items:center;gap:0.4rem;background:#E67E22;color:#fff;font-size:0.65rem;font-weight:700;letter-spacing:0.18em;padding:0.3rem 0.85rem;border-radius:2px;">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="white"><polygon points="8,5 19,12 8,19"/></svg>
+                PICKUP VIDEO
+            </span>
+            <div class="flex-1" style="height:1px; background:rgba(230,126,34,0.2);"></div>
+        </div>
+        <h3 class="text-white font-bold mb-6" style="font-size:1.35rem;line-height:1.65;">全国の管理組合が直面する<br>「空き駐車場」問題の実態</h3>
+        <div class="relative w-full rounded-xl overflow-hidden" style="padding-top:56.25%; box-shadow:0 20px 50px rgba(0,0,0,0.4); border:1px solid rgba(230,126,34,0.3);">
+            <div id="yt-facade" style="position:absolute;inset:0;cursor:pointer;" onclick="
+                var iframe=document.createElement('iframe');
+                iframe.setAttribute('src','https://www.youtube.com/embed/47liU0HzUy4?autoplay=1');
+                iframe.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+                iframe.setAttribute('allowfullscreen','');
+                iframe.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:0;';
+                this.replaceWith(iframe);
+            ">
+                <img src="https://i.ytimg.com/vi/47liU0HzUy4/maxresdefault.jpg" alt="動画サムネイル" style="width:100%;height:100%;object-fit:cover;">
+                <div style="position:absolute;inset:0;background:rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;">
+                    <div style="width:72px;height:72px;background:#dc2626;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(220,38,38,0.5);">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><polygon points="8,5 19,12 8,19"/></svg>
                     </div>
                 </div>
             </div>
